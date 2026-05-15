@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rerun Jobs Tool_V5 by Daiice</title>
+    <title>Rerun Jobs Tool_V6 by Daiice</title>
     <style>
         * {
             margin: 0;
@@ -240,7 +240,7 @@
         
         .job-list-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(5,auto);
             gap: 15px;
             margin: 15px 0;
         }
@@ -427,7 +427,7 @@
 <body>
     <div class="main-container">
 		<div class="header">
-            <h1>🛠️ Rerun Jobs Tool_V5 by Daiice</h1>
+            <h1>🛠️ Rerun Jobs Tool_V6 by Daiice</h1>
             <p>เครื่องมือสำหรับสร้างข้อความ ค้นหา log และคำนวณ Odate</p>
         </div>
 		
@@ -539,12 +539,17 @@
                     </div>
                     
                     <div class="job-input-group">
-                        <label for="jobs3">📋 Jobs สำหรับข้อ 3:</label>
+                        <label for="jobs1b">📋 Jobs สำหรับข้อ 3:</label>
+                        <textarea id="jobs1b" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U814EXD1311&#10;U814IMD1311"></textarea>
+                    </div>
+                    
+                    <div class="job-input-group">
+                        <label for="jobs3">📋 Jobs สำหรับข้อ 4:</label>
                         <textarea id="jobs3" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U805IMB044&#10;U805EXB041"></textarea>
                     </div>
                     
                     <div class="job-input-group">
-                        <label for="jobs45">📋 Jobs สำหรับข้อ 4-5:</label>
+                        <label for="jobs45">📋 Jobs สำหรับข้อ 5:</label>
                         <textarea id="jobs45" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U805IMD039"></textarea>
                     </div>
                 </div>
@@ -660,13 +665,11 @@
                 const parts = trimmed.split(/\s+/);
                 
                 if (parts.length >= 2) {
-                    // Format: ACTION ORDERID
                     results.push({
                         action: parts[0].toUpperCase(),
                         orderId: parts[1]
                     });
                 } else if (parts.length === 1) {
-                    // Format: ORDERID only
                     results.push({
                         action: null,
                         orderId: parts[0]
@@ -725,7 +728,6 @@
                         const orderId = (orderIdx !== -1 ? cols[orderIdx] : item.orderId);
                         const status = (orderIdx !== -1 && cols.length > orderIdx+1) ? cols[orderIdx+1] : '';
 
-                        // If action is specified in search, must match exactly
                         if(item.action !== null && action !== item.action) return;
 
                         foundThisItem = true;
@@ -803,9 +805,9 @@
 
         // ===== Odate Calculator Functions =====
         const holidays2026 = ["2025-12-31","2026-01-01","2026-01-02","2026-03-03","2026-04-06",
-							  "2026-04-13","2026-04-14","2026-04-15","2026-05-01","2026-05-04",
-							  "2026-06-01","2026-06-03","2026-07-28","2026-07-29","2026-08-12",
-							  "2026-10-13","2026-10-23","2026-12-07","2026-12-10","2026-12-31"];
+                              "2026-04-13","2026-04-14","2026-04-15","2026-05-01","2026-05-04",
+                              "2026-06-01","2026-06-03","2026-07-28","2026-07-29","2026-08-12",
+                              "2026-10-13","2026-10-23","2026-12-07","2026-12-10","2026-12-31"];
 
         document.getElementById('currentDate').valueAsDate = new Date();
 
@@ -873,6 +875,7 @@
             const genDateInput = document.getElementById('genDate').value;
             const jobs1Text = document.getElementById('jobs1').value;
             const jobs2Text = document.getElementById('jobs2').value;
+            const jobs1bText = document.getElementById('jobs1b').value;
             const jobs3Text = document.getElementById('jobs3').value;
             const jobs45Text = document.getElementById('jobs45').value;
             
@@ -898,6 +901,7 @@
             
             const jobs1 = parseJobs(jobs1Text);
             const jobs2 = parseJobs(jobs2Text);
+            const jobs1b = parseJobs(jobs1bText);
             const jobs3 = parseJobs(jobs3Text);
             const jobs45 = parseJobs(jobs45Text);
             
@@ -926,6 +930,14 @@
             if (jobs2.length > 0) {
                 emailBody += `ขอ Oder Job และ Rerun แบบไม่ Ignore Schedule Odate = **${formatDate(odate2)} (${formatDateWithMonth(odate2)})**\n`;
                 jobs2.forEach(job => {
+                    emailBody += `${job}\n`;
+                });
+                emailBody += `\n`;
+            }
+            
+            if (jobs1b.length > 0) {
+                emailBody += `ขอ Rerun Job Odate = **${formatDate(odate1)} (${formatDateWithMonth(odate1)})**\n`;
+                jobs1b.forEach(job => {
                     emailBody += `${job}\n`;
                 });
                 emailBody += `\n`;
