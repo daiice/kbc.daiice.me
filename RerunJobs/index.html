@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rerun Jobs Tool_V6 by Daiice</title>
+    <title>Rerun Jobs Tool_V7 by Daiice</title>
     <style>
         * {
             margin: 0;
@@ -240,14 +240,44 @@
         
         .job-list-section {
             display: grid;
-            grid-template-columns: repeat(5,auto);
+            grid-template-columns: repeat(5, 1fr);
             gap: 15px;
             margin: 15px 0;
         }
 		
 		.job-list-section textarea {
-            min-height: 100px;
+            min-height: 125px;
             resize: vertical;
+        }
+        
+        .btn-clear {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .btn-clear:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.3);
+        }
+        
+        @media (max-width: 1400px) {
+            .job-list-section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .job-list-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
         .job-input-group {
@@ -427,7 +457,7 @@
 <body>
     <div class="main-container">
 		<div class="header">
-            <h1>🛠️ Rerun Jobs Tool_V6 by Daiice</h1>
+            <h1>🛠️ Rerun Jobs Tool_V7 by Daiice</h1>
             <p>เครื่องมือสำหรับสร้างข้อความ ค้นหา log และคำนวณ Odate</p>
         </div>
 		
@@ -527,6 +557,8 @@
                     <input type="date" id="genDate">
                 </div>
                 
+                <button class="btn-clear" onclick="clearAllJobs()">🗑️ ล้างรายชื่อ Job ทั้งหมด</button>
+                
                 <div class="job-list-section">
                     <div class="job-input-group">
                         <label for="jobs1">📋 Jobs สำหรับข้อ 1:</label>
@@ -539,17 +571,17 @@
                     </div>
                     
                     <div class="job-input-group">
-                        <label for="jobs1b">📋 Jobs สำหรับข้อ 3:</label>
+                        <label for="jobs1b">📋 Jobs สำหรับข้อ 1b:</label>
                         <textarea id="jobs1b" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U814EXD1311&#10;U814IMD1311"></textarea>
                     </div>
                     
                     <div class="job-input-group">
-                        <label for="jobs3">📋 Jobs สำหรับข้อ 4:</label>
+                        <label for="jobs3">📋 Jobs สำหรับข้อ 3:</label>
                         <textarea id="jobs3" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U805IMB044&#10;U805EXB041"></textarea>
                     </div>
                     
                     <div class="job-input-group">
-                        <label for="jobs45">📋 Jobs สำหรับข้อ 5:</label>
+                        <label for="jobs45">📋 Jobs สำหรับข้อ 4-5:</label>
                         <textarea id="jobs45" placeholder="ใส่รายชื่อ Job (แยกบรรทัด)&#10;เช่น&#10;U805IMD039"></textarea>
                     </div>
                 </div>
@@ -810,6 +842,80 @@
                               "2026-10-13","2026-10-23","2026-12-07","2026-12-10","2026-12-31"];
 
         document.getElementById('currentDate').valueAsDate = new Date();
+
+        // Cookie Functions
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/';
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
+            return null;
+        }
+
+        function saveJobsToCookie() {
+            setCookie('jobs1', document.getElementById('jobs1').value, 365);
+            setCookie('jobs2', document.getElementById('jobs2').value, 365);
+            setCookie('jobs1b', document.getElementById('jobs1b').value, 365);
+            setCookie('jobs3', document.getElementById('jobs3').value, 365);
+            setCookie('jobs45', document.getElementById('jobs45').value, 365);
+        }
+
+        function loadJobsFromCookie() {
+            const jobs1 = getCookie('jobs1');
+            const jobs2 = getCookie('jobs2');
+            const jobs1b = getCookie('jobs1b');
+            const jobs3 = getCookie('jobs3');
+            const jobs45 = getCookie('jobs45');
+
+            if (jobs1) document.getElementById('jobs1').value = jobs1;
+            if (jobs2) document.getElementById('jobs2').value = jobs2;
+            if (jobs1b) document.getElementById('jobs1b').value = jobs1b;
+            if (jobs3) document.getElementById('jobs3').value = jobs3;
+            if (jobs45) document.getElementById('jobs45').value = jobs45;
+        }
+
+        function clearAllJobs() {
+            if (confirm('คุณต้องการล้างรายชื่อ Job ทั้งหมดใช่หรือไม่?')) {
+                document.getElementById('jobs1').value = '';
+                document.getElementById('jobs2').value = '';
+                document.getElementById('jobs1b').value = '';
+                document.getElementById('jobs3').value = '';
+                document.getElementById('jobs45').value = '';
+                
+                // ลบ Cookie
+                setCookie('jobs1', '', -1);
+                setCookie('jobs2', '', -1);
+                setCookie('jobs1b', '', -1);
+                setCookie('jobs3', '', -1);
+                setCookie('jobs45', '', -1);
+                
+                alert('ล้างรายชื่อ Job ทั้งหมดเรียบร้อยแล้ว');
+            }
+        }
+
+        // Auto-save on input change
+        ['jobs1', 'jobs2', 'jobs1b', 'jobs3', 'jobs45'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', function() {
+                    setCookie(id, this.value, 365);
+                });
+            }
+        });
+
+        // Load jobs from cookie on page load
+        window.addEventListener('load', function() {
+            loadJobsFromCookie();
+        });
 
         function formatDate(date) {
             const day = String(date.getDate()).padStart(2, '0');
