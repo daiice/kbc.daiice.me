@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Total Size S3 Tool by Daiice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .main-container {
+      max-width: 1380px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header matching Rerun Jobs Tool_V9 */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 15px;
+      opacity: 0.92;
+    }
+
+    .back-link {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+      color: white;
+      text-decoration: none;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-link:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Tabs matching Rerun Jobs Tool_V9 */
+    .tabs-header {
+      display: flex;
+      background: #f8f9fa;
+      border-bottom: 3px solid #e0e0e0;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 20px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: #666;
+      transition: all 0.3s;
+      position: relative;
+      font-family: inherit;
+    }
+
+    .tab-button:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    .tab-button.active {
+      color: #667eea;
+      background: white;
+    }
+
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 30px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Info Box & Alerts matching Rerun Jobs Tool_V9 */
+    .info-box {
+      background: #d1ecf1;
+      border-left: 5px solid #0c5460;
+      color: #0c5460;
+      padding: 15px 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .status-banner {
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .status-banner.idle {
+      background: #f8f9ff;
+      color: #667eea;
+      border-left: 4px solid #667eea;
+    }
+
+    .status-banner.ok {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-left: 4px solid #4caf50;
+    }
+
+    .status-banner.warn {
+      background: #fff8e1;
+      color: #e65100;
+      border-left: 4px solid #ff9800;
+    }
+
+    .status-banner.err {
+      background: #f8d7da;
+      border-left: 5px solid #dc3545;
+      color: #721c24;
+    }
+
+    /* Input Section matching Rerun Jobs Tool_V9 */
+    .input-section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+      border: 1px solid #eceef2;
+    }
+
+    .section-card {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-pill.pink {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .badge-pill.green {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 135px;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: all 0.3s;
+      font-family: 'Courier New', Consolas, monospace;
+      resize: vertical;
+      background: #fff;
+      color: #333;
+    }
+
+    textarea:focus, select:focus, input[type="date"]:focus, input[type="time"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+    }
+
+    select, input[type="date"], input[type="time"] {
+      font-family: inherit;
+      font-size: 14px;
+      padding: 8px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      background: #fff;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    /* Buttons matching Rerun Jobs Tool_V9 */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: white;
+    }
+
+    .btn-green:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(17, 153, 142, 0.35);
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .btn-download:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 87, 108, 0.35);
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-outline {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      padding: 8px 16px;
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: #f8f9ff;
+      transform: translateY(-2px);
+    }
+
+    .btn-clear-action {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-clear-action:hover:not(:disabled) {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .controls-bar {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    label.inline-opt {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      user-select: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .cell-tag {
+      display: inline-block;
+      font-family: Consolas, monospace;
+      font-weight: 700;
+      background: #fff;
+      color: #667eea;
+      border: 1.5px solid #667eea;
+      padding: 1px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .header-copy-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #f8f9ff;
+      border: 2px solid #e0e6ff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .header-preview-text {
+      font-family: Consolas, monospace;
+      font-weight: 700;
+      background: #a3e635;
+      color: #0f172a;
+      padding: 5px 14px;
+      border-radius: 8px;
+      border: 1px solid #65a30d;
+    }
+
+    /* Table matching Rerun Jobs Tool_V9 */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 1px solid #e0e0e0;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: white;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
+      text-align: left;
+    }
+
+    th:last-child, td:last-child { border-right: none; }
+    tr:last-child td { border-bottom: none; }
+
+    thead th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .th-sub {
+      background: #eef1ff !important;
+      color: #4338ca !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+    }
+
+    tr:hover td {
+      background: #f8f9ff;
+    }
+
+    td.num {
+      text-align: right;
+      font-family: Consolas, 'Courier New', monospace;
+      font-weight: 600;
+    }
+
+    td.unit {
+      text-align: center;
+      font-family: Consolas, 'Courier New', monospace;
+      color: #555;
+      font-weight: 600;
+    }
+
+    td.col-ref {
+      text-align: center;
+      color: #667eea;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: Consolas, monospace;
+      background: #f8f9ff;
+    }
+
+    td.bucket-name {
+      font-weight: 600;
+      color: #222;
+    }
+
+    td.bucket-name small {
+      display: block;
+      font-weight: 400;
+      color: #777;
+      font-size: 12px;
+    }
+
+    td.readonly-col {
+      background: #fafafa;
+      color: #777;
+    }
+
+    .pct-ok { background: #e8f5e9 !important; color: #2e7d32 !important; font-weight: 700; }
+    .pct-warn { background: #fff8e1 !important; color: #ef6c00 !important; font-weight: 700; }
+    .pct-high { background: #ffebee !important; color: #c62828 !important; font-weight: 700; }
+
+    .conv-badge {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #ffeb3b;
+      color: #d32f2f;
+      vertical-align: middle;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .missing-row td {
+      background: #ffebee !important;
+      color: #c62828;
+    }
+
+    input.cell-edit {
+      width: 78px;
+      text-align: right;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 6px;
+      border: 1.5px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: inherit;
+    }
+
+    input.cell-edit:hover, input.unit-edit:hover {
+      border-color: #cbd5e1;
+      background: #fff;
+    }
+
+    input.cell-edit:focus, input.unit-edit:focus {
+      outline: none;
+      border-color: #667eea;
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
+    }
+
+    input.unit-edit {
+      width: 48px;
+      text-align: center;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px;
+      border: 1.5px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: #444;
+    }
+
+    .jul-cell-size { background: #f8faff; }
+    .jul-cell-obj { background: #fdfbff; }
+    .bk4-cell { background: #f8f9ff; }
+    .bk7-cell { background: #fff9f5; }
+
+    .raw-tsv-box {
+      margin-top: 10px;
+      background: #1e1b4b;
+      color: #e0e7ff;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      padding: 12px 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    details {
+      margin-top: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 13px;
+      color: #667eea;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(15px);
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: #052e16;
+    }
+
+    @media (max-width: 768px) {
+      .back-link {
+        position: static;
+        margin-bottom: 12px;
+      }
+      .tabs-header {
+        flex-direction: column;
+      }
+      .tab-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="header">
+      <a href="tools-dashboard.html" class="back-link">⬅️ กลับหน้า Tool Dashboard</a>
+      <h1>📊 Total Size S3 Tool by Daiice</h1>
+      <p>เครื่องมือแปลงข้อมูลจากหน้าเว็บ S3 เพื่อนำไปวางในไฟล์ Total Size S3.xlsx (%%%, Total Size Jul 2025, kbc_prod_bk4,7)</p>
+    </div>
+
+    <div class="tabs-header">
+      <button class="tab-button active" data-tab="day0">📊 ชีท %%% &amp; Total Size Jul 2025 (ข้อมูลวันนี้ - 12 Buckets)</button>
+      <button class="tab-button" data-tab="day1">🗂️ ชีท kbc_prod_bk4,7 (ข้อมูลย้อนหลัง Day - 1)</button>
+      <button class="tab-button" data-tab="all">📑 แสดงทั้งหมดในหน้าเดียว</button>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: DAY 0 (Sheets %%% and Total Size Jul 2025)                   -->
+    <!-- =================================================================== -->
+    <div class="tab-content active" id="tab-day0">
+      <div class="info-box">
+        <div>
+          📊 <strong>ข้อมูลประจำวัน (Day 0 - 12 Buckets) :</strong> คลุมดำตาราง 12 Buckets จากหน้าเว็บ S3 มาวาง เพื่อแปลงลงชีท <strong>%%%</strong> และ <strong>Total Size Jul 2025</strong>
+        </div>
+        <span class="badge-pill">Day 0 (12 Buckets)</span>
+      </div>
+
+      <div class="input-section">
+        <div class="section-header" style="border-bottom:none; margin-bottom:8px; padding-bottom:0;">
+          <label style="font-weight:700; font-size:16px; color:#333;">📋 1. วางข้อมูล 12 Buckets ที่คลุมดำจากหน้าเว็บ S3:</label>
+          <div class="btn-group">
+            <button class="btn-primary" id="btnPasteClipboard">📋 วางจาก Clipboard</button>
+            <button class="btn-outline" id="btnLoadSample">🧪 โหลดตัวอย่าง 12 Buckets</button>
+            <button class="btn-clear-action" id="btnClear">🗑️ ล้างข้อมูล</button>
+          </div>
+        </div>
+
+        <textarea id="rawInput" placeholder="คลุมดำตาราง 12 Buckets (ตั้งแต่ kbc_prod_aq_bk1 ถึง kbc_uat_bk4) แล้วกด Ctrl+V ที่นี่..."></textarea>
+
+        <div class="controls-bar">
+          <div class="options-row">
+            <label class="inline-opt">
+              <input type="checkbox" id="optAutoConvert" checked />
+              <strong>แปลงหน่วยอัตโนมัติให้ตรงสูตร/กราฟ Excel</strong> (เช่น 682.30 MiB → 0.666 GiB)
+            </label>
+            <label class="inline-opt">
+              ฐานแปลงหน่วย:
+              <select id="optDivisor">
+                <option value="1024" selected>÷ 1024 (Binary: KiB/MiB/GiB/TiB — แนะนำ)</option>
+                <option value="1000">÷ 1000 (Decimal: KB/MB/GB/TB)</option>
+              </select>
+            </label>
+          </div>
+          <div class="options-row">
+            <label class="inline-opt">
+              📅 วันที่ (Day 0):
+              <input type="date" id="inputDate" />
+            </label>
+            <label class="inline-opt">
+              ⏰ เวลา:
+              <input type="time" id="inputTime" />
+            </label>
+          </div>
+        </div>
+
+        <div id="statusBanner" class="status-banner idle">
+          รอรับข้อมูล 12 Buckets... วางข้อความด้านบน หรือกด "โหลดตัวอย่าง 12 Buckets"
+        </div>
+      </div>
+
+      <!-- SHEET %%% -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">
+            <span>2. ชีท <code>%%%</code></span>
+            <span class="badge-pill">วางแยก 2 จุด (ไม่ทับสูตร Col E:G)</span>
+          </div>
+          <div class="btn-group">
+            <label class="inline-opt" style="font-size:13px; margin-right:6px;">
+              <input type="checkbox" id="optPctIncludeUnit" />
+              รวมคอลัมน์หน่วย (C:D และ H:I)
+            </label>
+            <button class="btn-primary" id="btnCopyPctSize" disabled>📋 Copy Total Size (วางที่ C4)</button>
+            <button class="btn-download" id="btnCopyPctObj" disabled>📋 Copy Object Count (วางที่ H4)</button>
+          </div>
+        </div>
+
+        <div class="header-copy-bar">
+          <div>
+            <strong>หัวตารางช่อง <span class="cell-tag">B2</span> :</strong>
+            <span class="header-preview-text" id="b2Preview" style="margin-left:8px;">Total Size S3    20/11/2026  07:15 AM</span>
+          </div>
+          <button class="btn-green" id="btnCopyB2">📋 Copy หัวตารางช่อง B2</button>
+        </div>
+
+        <div class="info-box" style="margin-bottom:15px;">
+          <div>
+            💡 <strong>วิธีวางในชีท <code>%%%</code> :</strong>
+            1) กด <strong>Copy Total Size</strong> → คลิกช่อง <span class="cell-tag">C4</span> แล้วกด <code>Ctrl+V</code> &nbsp;|&nbsp;
+            2) กด <strong>Copy Object Count</strong> → คลิกช่อง <span class="cell-tag">H4</span> แล้วกด <code>Ctrl+V</code>
+          </div>
+          <span style="font-size:12px;">* คลิกแก้ตัวเลข/หน่วยในตารางได้โดยตรงก่อน Copy</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:50px;">Row</th>
+                <th style="text-align:left;">Buckets (Col B)</th>
+                <th colspan="2">Total Size (Used) — Col C:D</th>
+                <th colspan="2">Capacity — Col E:F (คงเดิม)</th>
+                <th>% of Used — Col G (สูตรเดิม)</th>
+                <th colspan="2">Object Count — Col H:I</th>
+                <th>ค่าดิบจากเว็บ</th>
+              </tr>
+            </thead>
+            <tbody id="pctTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET Total Size Jul 2025 -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">
+            <span>3. ชีท <code>Total Size Jul 2025</code></span>
+            <span class="badge-pill green">วาง 1 แถวแนวนอนครบ 12 Buckets (B → AW)</span>
+          </div>
+          <div class="btn-group">
+            <label class="inline-opt" style="font-size:13px; margin-right:6px;">
+              <input type="checkbox" id="optJulIncludeDate" />
+              รวมวันที่ด้วย (เริ่มวางที่ A แทน B)
+            </label>
+            <button class="btn-green" id="btnCopyJulRow" disabled>📋 Copy 1 แถวแนวนอน (วางที่ช่อง B ของวันนี้)</button>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin-bottom:15px;">
+          <div>
+            💡 <strong>วิธีวางในชีท <code>Total Size Jul 2025</code> :</strong>
+            คลิกช่อง <span class="cell-tag" id="julStartCellTag">B</span> ของแถววันที่วันนี้ (เช่น <code>B511</code>) แล้วกด <code>Ctrl+V</code> ครั้งเดียว ข้อมูลจะลงครบตั้งแต่ <code>B</code> ถึง <code>AW</code>
+          </div>
+          <span style="font-size:12px;">* คลิกแก้ค่าในตารางแนวนอนได้ก่อน Copy</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="julTable">
+            <thead id="julTableHead"></thead>
+            <tbody id="julTableBody"></tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary>🔍 ดูข้อความ TSV ที่จะถูกคัดลอกไปวางในชีท Total Size Jul 2025</summary>
+          <div class="raw-tsv-box" id="julTsvPreview">-</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: DAY - 1 (Sheet kbc_prod_bk4,7)                               -->
+    <!-- =================================================================== -->
+    <div class="tab-content" id="tab-day1">
+      <div class="info-box">
+        <div>
+          🗂️ <strong>ข้อมูลย้อนหลัง 1 วัน (Day - 1) สำหรับชีท <code>kbc_prod_bk4,7</code> :</strong>
+          เป็นข้อมูลคนละชุดกับชีท <code>%%%</code> และ <code>Total Size Jul 2025</code> (ดึงเฉพาะ <code>kbc_prod_bk4</code> และ <code>kbc_prod_bk7</code> พร้อม <em>Objects Created</em> และ <em>Write Traffic</em>)
+        </div>
+        <span class="badge-pill pink">Day - 1 (bk4 &amp; bk7)</span>
+      </div>
+
+      <div class="input-section">
+        <div class="section-header" style="border-bottom:none; margin-bottom:8px; padding-bottom:0;">
+          <label style="font-weight:700; font-size:16px; color:#333;">📋 วางข้อมูล Day - 1 (จากหน้าเว็บที่กด Filter / APPLY):</label>
+          <div class="btn-group">
+            <button class="btn-primary" id="btnPasteBk47Clipboard">📋 วางข้อมูล Day - 1 จาก Clipboard</button>
+            <button class="btn-outline" id="btnLoadSampleBk47">🧪 โหลดตัวอย่าง Day - 1 (จากภาพ 3)</button>
+            <button class="btn-clear-action" id="btnClearBk47">🗑️ ล้างข้อมูล Day - 1</button>
+          </div>
+        </div>
+
+        <textarea id="rawInputBk47" placeholder="คลุมดำข้อมูล Day - 1 จากหน้าเว็บที่มีคอลัมน์ Total Size, Object Count, Objects Created, Write Traffic ของ kbc_prod_bk4 และ kbc_prod_bk7 แล้วกด Ctrl+V ที่ช่องนี้..."></textarea>
+
+        <div class="controls-bar">
+          <div class="options-row">
+            <label class="inline-opt">
+              📅 <strong>วันที่ของข้อมูล (Day - 1):</strong>
+              <input type="date" id="inputDateBk47" />
+            </label>
+            <label class="inline-opt">
+              <input type="checkbox" id="optBk47IncludeDate" />
+              รวมคอลัมน์วันที่ตอน Copy (เริ่มวางที่ C และ M)
+            </label>
+          </div>
+        </div>
+
+        <div id="statusBannerBk47" class="status-banner idle">
+          รอรับข้อมูล Day - 1 สำหรับ <code>kbc_prod_bk4</code> และ <code>kbc_prod_bk7</code>...
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">
+            <span>ตารางพรีวิวชีท <code>kbc_prod_bk4,7</code></span>
+            <span class="badge-pill pink">ข้อมูล Day - 1</span>
+          </div>
+          <div class="btn-group">
+            <button class="btn-primary" id="btnCopyBk4" disabled>📋 Copy kbc_prod_bk4 (วางที่ช่อง D)</button>
+            <button class="btn-download" id="btnCopyBk7" disabled>📋 Copy kbc_prod_bk7 (วางที่ช่อง N)</button>
+            <button class="btn-green" id="btnCopyBk47Both" disabled>📋 Copy ทั้งคู่ bk4 + bk7 (วางที่ช่อง D ทีเดียว)</button>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin-bottom:15px;">
+          <div>
+            💡 <strong>วิธีวางในชีท <code>kbc_prod_bk4,7</code> (แถวของวันที่ Day - 1) :</strong>
+            1) กด <strong>Copy kbc_prod_bk4</strong> → คลิกช่อง <span class="cell-tag" id="bk4StartCellTag">D</span> (เช่น <code>D747</code>) แล้วกด <code>Ctrl+V</code> &nbsp;|&nbsp;
+            2) กด <strong>Copy kbc_prod_bk7</strong> → คลิกช่อง <span class="cell-tag" id="bk7StartCellTag">N</span> (เช่น <code>N747</code>) แล้วกด <code>Ctrl+V</code>
+            &nbsp;(หรือกดปุ่มสีเขียวเพื่อวางรวดเดียวตั้งแต่ <code>D</code> ถึง <code>U</code>)
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th rowspan="2">Date (Day - 1)<br>(Col C)</th>
+                <th colspan="8">kbc_prod_bk4 (Col D : K)</th>
+                <th style="background:#4b5563;" rowspan="2">เว้น<br>(Col L)</th>
+                <th rowspan="2">Date (Day - 1)<br>(Col M)</th>
+                <th colspan="8">kbc_prod_bk7 (Col N : U)</th>
+              </tr>
+              <tr>
+                <th class="th-sub" colspan="2">Total Size (D:E)</th>
+                <th class="th-sub" colspan="2">Object Count (F:G)</th>
+                <th class="th-sub" colspan="2">Number of files/day (H:I)<br><small style="font-weight:400;">← Objects Created</small></th>
+                <th class="th-sub" colspan="2">Size per day (J:K)<br><small style="font-weight:400;">← Write Traffic</small></th>
+                <th class="th-sub" colspan="2">Total Size (N:O)</th>
+                <th class="th-sub" colspan="2">Object Count (P:Q)</th>
+                <th class="th-sub" colspan="2">Number of files/day (R:S)<br><small style="font-weight:400;">← Objects Created</small></th>
+                <th class="th-sub" colspan="2">Size per day (T:U)<br><small style="font-weight:400;">← Write Traffic</small></th>
+              </tr>
+            </thead>
+            <tbody id="bk47TableBody"></tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary>🔍 ดูข้อความ TSV ที่จะถูกคัดลอกไปวางในชีท kbc_prod_bk4,7</summary>
+          <div class="raw-tsv-box" id="bk47TsvPreview">-</div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">คัดลอกแล้ว!</div>
+
+  <script>
+    // =========================================================================
+    // TAB NAVIGATION (Matches Rerun Jobs Tool_V9 + "Show All" mode)
+    // =========================================================================
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.tab;
+        const tabDay0 = document.getElementById('tab-day0');
+        const tabDay1 = document.getElementById('tab-day1');
+        if (mode === 'day0') {
+          tabDay0.classList.add('active');
+          tabDay1.classList.remove('active');
+        } else if (mode === 'day1') {
+          tabDay0.classList.remove('active');
+          tabDay1.classList.add('active');
+        } else {
+          tabDay0.classList.add('active');
+          tabDay1.classList.add('active');
+        }
+      });
+    });
+
+    // =========================================================================
+    // CONFIGURATION MATCHING Total Size S3.xlsx
+    // =========================================================================
+    const BUCKET_CONFIG = [
+      {
+        name: 'kbc_prod_aq_bk1',
+        excelRow: 4,
+        label: 'kbc_prod_aq_bk1 (Screen recording AQ)',
+        capVal: 40, capUnit: 'TB',
+        pctSizeUnit: 'TB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 40,
+        julCols: ['B','C','D','E'], julSizeUnit: 'TiB', julDecimals: 2, julDefaultObjUnit: 'M'
+      },
+      {
+        name: 'kbc_prod_bk1',
+        excelRow: 5,
+        label: 'kbc_prod_bk1 (Voice AQ,CC,smb)',
+        capVal: 40, capUnit: 'TB',
+        pctSizeUnit: 'TB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 40,
+        julCols: ['F','G','H','I'], julSizeUnit: 'TiB', julDecimals: 2, julDefaultObjUnit: 'B'
+      },
+      {
+        name: 'kbc_prod_bk2',
+        excelRow: 6,
+        label: 'kbc_prod_bk2 (Screen CC : CWN & RAT)',
+        capVal: 70, capUnit: 'TB',
+        pctSizeUnit: 'TB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 70,
+        julCols: ['J','K','L','M'], julSizeUnit: 'TiB', julDecimals: 2, julDefaultObjUnit: 'M'
+      },
+      {
+        name: 'kbc_prod_bk3',
+        excelRow: 7,
+        label: 'kbc_prod_bk3 [Archive Voice file from TSM Protectier to S3]',
+        capVal: 60, capUnit: 'TB',
+        pctSizeUnit: 'TB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 60,
+        julCols: ['N','O','P','Q'], julSizeUnit: 'TiB', julDecimals: 2, julDefaultObjUnit: 'B'
+      },
+      {
+        name: 'kbc_prod_bk4',
+        excelRow: 8,
+        label: 'kbc_prod_bk4 [Archive Voice file from TSM SL8500 to S3]',
+        capVal: 20, capUnit: 'TB',
+        pctSizeUnit: 'GB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 50000,
+        julCols: ['R','S','T','U'], julSizeUnit: 'GiB', julDecimals: 2, julDefaultObjUnit: 'M'
+      },
+      {
+        name: 'kbc_prod_bk5',
+        excelRow: 9,
+        label: 'kbc_prod_bk5 [Export voice file to KLab]',
+        capVal: 6, capUnit: 'TB',
+        pctSizeUnit: 'TB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => c / 6,
+        julCols: ['V','W','X','Y'], julSizeUnit: 'TiB', julDecimals: 2, julDefaultObjUnit: 'M'
+      },
+      {
+        name: 'kbc_prod_bk6',
+        excelRow: 10,
+        label: 'kbc_prod_bk6',
+        capVal: 3, capUnit: 'TB',
+        pctSizeUnit: 'KB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => (c / 10024) / 3000,
+        julCols: ['Z','AA','AB','AC'], julSizeUnit: 'KiB', julDecimals: 2, julDefaultObjUnit: ''
+      },
+      {
+        name: 'kbc_prod_bk7',
+        excelRow: 11,
+        label: 'kbc_prod_bk7',
+        capVal: 50, capUnit: 'GB',
+        pctSizeUnit: 'MB', pctDecimals: 2, pctDefaultObjUnit: 'K',
+        pctFormula: (c) => (c / 1024) / 50,
+        julCols: ['AD','AE','AF','AG'], julSizeUnit: 'M', julDecimals: 2, julDefaultObjUnit: 'B'
+      },
+      {
+        name: 'kbc_uat_bk1',
+        excelRow: 12,
+        label: 'kbc_uat_bk1',
+        capVal: 400, capUnit: 'GB',
+        pctSizeUnit: 'GB', pctDecimals: 3, pctDefaultObjUnit: 'K',
+        pctFormula: (c) => c / 400,
+        julCols: ['AH','AI','AJ','AK'], julSizeUnit: 'GiB', julDecimals: 3, julDefaultObjUnit: 'K'
+      },
+      {
+        name: 'kbc_uat_bk2',
+        excelRow: 13,
+        label: 'kbc_uat_bk2',
+        capVal: 400, capUnit: 'GB',
+        pctSizeUnit: 'MB', pctDecimals: 2, pctDefaultObjUnit: 'K',
+        pctFormula: (c) => (c / 1024) / 400,
+        julCols: ['AL','AM','AN','AO'], julSizeUnit: 'GiB', julDecimals: 3, julDefaultObjUnit: 'K'
+      },
+      {
+        name: 'kbc_uat_bk3',
+        excelRow: 14,
+        label: 'kbc_uat_bk3',
+        capVal: 40, capUnit: 'GB',
+        pctSizeUnit: 'MB', pctDecimals: 2, pctDefaultObjUnit: 'K',
+        pctFormula: (c) => (c / 1024) / 40,
+        julCols: ['AP','AQ','AR','AS'], julSizeUnit: 'MiB', julDecimals: 2, julDefaultObjUnit: 'K'
+      },
+      {
+        name: 'kbc_uat_bk4',
+        excelRow: 15,
+        label: 'kbc_uat_bk4',
+        capVal: 40, capUnit: 'GB',
+        pctSizeUnit: 'MB', pctDecimals: 2, pctDefaultObjUnit: 'B',
+        pctFormula: (c) => (c / 1024) / 40,
+        julCols: ['AT','AU','AV','AW'], julSizeUnit: 'M', julDecimals: 2, julDefaultObjUnit: 'B'
+      }
+    ];
+
+    const SAMPLE_DATA = `Namespace\tBuckets\tBucket Tags\tTotal MPU Parts\tTotal MPU Size\tTotal Size\tObject Count\tLast Updated
+cwn_ns001\tkbc_prod_aq_bk1\t\t0\t0.00 B\t7.51 TiB\t1.25 M\t2026-11-19 22:57:00
+cwn_ns001\tkbc_prod_bk1\t\t0\t0.00 B\t21.11 TiB\t0.12 B\t2026-11-19 23:07:59
+cwn_ns001\tkbc_prod_bk2\t\t0\t0.00 B\t61.20 TiB\t3.46 M\t2026-11-19 22:57:00
+cwn_ns001\tkbc_prod_bk3\t\t0\t0.00 B\t51.10 TiB\t0.55 B\t2026-11-16 19:40:00
+cwn_ns001\tkbc_prod_bk4\t\t0\t0.00 B\t231.40 GiB\t1.65 M\t2026-09-07 17:45:00
+cwn_ns001\tkbc_prod_bk5\t\t0\t0.00 B\t4.95 TiB\t9.50 M\t2026-11-18 00:05:00
+cwn_ns001\tkbc_prod_bk6\t\t0\t0.00 B\t414.35 KiB\t10\t2026-11-19 23:07:59
+cwn_ns001\tkbc_prod_bk7\t\t0\t0.00 B\t1.69 MiB\t47\t2026-11-19 22:57:00
+cwn_ns001\tkbc_uat_bk1\t\t0\t0.00 B\t682.30 MiB\t5.85 K\t2026-11-17 18:45:00
+cwn_ns001\tkbc_uat_bk2\t\t0\t0.00 B\t529.77 MiB\t3.39 K\t2026-11-19 23:40:00
+cwn_ns001\tkbc_uat_bk3\t\t0\t0.00 B\t190.34 MiB\t1.01 K\t2026-11-20 01:23:46
+cwn_ns001\tkbc_uat_bk4\t\t0\t0.00 B\t23.19 MiB\t276\t2026-11-20 01:22:21`;
+
+    const SAMPLE_BK47_TRAFFIC = `Namespace\tBuckets\tBucket Tags\tTotal MPU Parts\tTotal MPU Size\tTotal Size\tObject Count\tObjects Created\tObjects Deleted\tWrite Traffic\tRead Traffic
+cwn_ns001\tkbc_prod_bk4\t\t0\t0.00 B\t118.36 GiB\t0.85 M\t0\t0\t313.13 KiB\t0.00 B
+cwn_ns001\tkbc_prod_bk7\t\t0\t0.00 B\t1.47 MiB\t40\t0\t0\t99.03 KiB\t0.00 B`;
+
+    let state = {
+      parsedMap: {},
+      parsedMapBk47: {},
+      pctRows: [],
+      julRows: [],
+      bk47: {
+        bk4: { found: false, sizeVal: '', sizeUnit: 'GB', objVal: '', objUnit: 'M', filesVal: '', filesUnit: 'K', writeVal: '', writeUnit: 'MiB' },
+        bk7: { found: false, sizeVal: '', sizeUnit: 'MiB', objVal: '', objUnit: 'B', filesVal: '', filesUnit: 'k', writeVal: '', writeUnit: 'KiB' }
+      }
+    };
+
+    // =========================================================================
+    // UNIT CONVERSION HELPERS
+    // =========================================================================
+    const UNIT_RANK = {
+      'B': 0,
+      'K': 1, 'KB': 1, 'KIB': 1,
+      'M': 2, 'MB': 2, 'MIB': 2,
+      'G': 3, 'GB': 3, 'GIB': 3,
+      'T': 4, 'TB': 4, 'TIB': 4,
+      'P': 5, 'PB': 5, 'PIB': 5
+    };
+
+    function getUnitRank(unit) {
+      if (!unit) return null;
+      const key = unit.trim().toUpperCase();
+      return Object.prototype.hasOwnProperty.call(UNIT_RANK, key) ? UNIT_RANK[key] : null;
+    }
+
+    function toShortExcelUnit(rawUnit) {
+      const u = (rawUnit || '').trim().toUpperCase();
+      if (u === 'TIB' || u === 'TB') return 'TB';
+      if (u === 'GIB' || u === 'GB') return 'GB';
+      if (u === 'MIB' || u === 'MB') return 'MB';
+      if (u === 'KIB' || u === 'KB') return 'KB';
+      if (u === 'PIB' || u === 'PB') return 'PB';
+      return rawUnit || '';
+    }
+
+    function convertSize(value, fromUnit, toUnit, divisor, decimals) {
+      const rFrom = getUnitRank(fromUnit);
+      const rTo = getUnitRank(toUnit);
+      if (rFrom === null || rTo === null || isNaN(value)) {
+        return { value: String(value), converted: false };
+      }
+      if (rFrom === rTo) {
+        return { value: formatNum(value, decimals, false), converted: false };
+      }
+      const diff = rFrom - rTo;
+      const convertedNum = value * Math.pow(divisor, diff);
+      return {
+        value: formatNum(convertedNum, decimals, true),
+        converted: true
+      };
+    }
+
+    function formatNum(num, decimals, fixedDecimals) {
+      if (isNaN(num)) return '';
+      if (fixedDecimals) {
+        return Number(num.toFixed(decimals)).toString();
+      }
+      return Number(num.toFixed(Math.max(decimals, 2))).toString();
+    }
+
+    // =========================================================================
+    // ROBUST MULTI-FORMAT PARSER (Supports both Standard & Traffic views)
+    // =========================================================================
+    function parseWebText(rawText) {
+      const result = {};
+      if (!rawText || !rawText.trim()) return result;
+
+      const text = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\u00A0/g, ' ');
+
+      const matches = [];
+      for (const cfg of BUCKET_CONFIG) {
+        const re = new RegExp(`\\b${cfg.name}\\b`, 'gi');
+        let m;
+        while ((m = re.exec(text)) !== null) {
+          matches.push({ name: cfg.name, index: m.index, end: m.index + m[0].length });
+        }
+      }
+
+      if (matches.length === 0) return result;
+
+      matches.sort((a, b) => a.index - b.index);
+
+      for (let i = 0; i < matches.length; i++) {
+        const cur = matches[i];
+        const nextIdx = (i + 1 < matches.length) ? matches[i + 1].index : text.length;
+        const chunk = text.slice(cur.end, nextIdx);
+        const parsed = parseBucketChunk(chunk);
+        if (parsed) {
+          result[cur.name] = parsed;
+        }
+      }
+
+      return result;
+    }
+
+    function parseBucketChunk(chunk) {
+      let lastUpdated = '';
+      const dateMatch = chunk.match(/\b\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\b/);
+      let work = chunk;
+      if (dateMatch) {
+        lastUpdated = dateMatch[0];
+        work = chunk.slice(0, dateMatch.index);
+      }
+      work = work.replace(/\bcwn_ns\d+\b/gi, ' ');
+
+      const sizeRe = /(\d+(?:,\d{3})*(?:\.\d+)?)\s*(TiB|GiB|MiB|KiB|PiB|TB|GB|MB|KB|PB|B)\b/gi;
+      const sizeTokens = [];
+      let m;
+      while ((m = sizeRe.exec(work)) !== null) {
+        sizeTokens.push({
+          full: m[0],
+          numStr: m[1].replace(/,/g, ''),
+          num: parseFloat(m[1].replace(/,/g, '')),
+          unit: m[2],
+          index: m.index,
+          end: m.index + m[0].length
+        });
+      }
+
+      if (sizeTokens.length === 0) return null;
+
+      const beforeFirstSize = work.slice(0, sizeTokens[0].index);
+      const hasMpuPartsBefore = /\b\d+\b/.test(beforeFirstSize);
+
+      let totalSizeToken;
+      if (sizeTokens.length >= 2 && hasMpuPartsBefore) {
+        totalSizeToken = sizeTokens[1];
+      } else if (
+        sizeTokens.length >= 2 &&
+        sizeTokens[0].num === 0 &&
+        sizeTokens[0].unit.toUpperCase() === 'B' &&
+        sizeTokens[1].unit.length > 1
+      ) {
+        totalSizeToken = sizeTokens[1];
+      } else {
+        totalSizeToken = sizeTokens[0];
+      }
+
+      const afterTotalSize = work.slice(totalSizeToken.end);
+      const objMatch = afterTotalSize.match(/(\d+(?:,\d{3})*(?:\.\d+)?)\s*([KMBT])?\b/i);
+
+      let rawObjVal = '';
+      let rawObjUnit = '';
+      let rawCreatedVal = '0';
+      let rawCreatedUnit = '';
+      let rawWriteVal = '0';
+      let rawWriteUnit = '';
+      let hasTrafficCols = false;
+
+      if (objMatch) {
+        rawObjVal = objMatch[1].replace(/,/g, '');
+        rawObjUnit = objMatch[2] ? objMatch[2].toUpperCase() : '';
+
+        const afterObj = afterTotalSize.slice(objMatch.index + objMatch[0].length);
+        const createdMatch = afterObj.match(/(\d+(?:,\d{3})*(?:\.\d+)?)\s*([KMBT])?\b/i);
+        if (createdMatch) {
+          const afterCreated = afterObj.slice(createdMatch.index + createdMatch[0].length);
+          const deletedMatch = afterCreated.match(/(\d+(?:,\d{3})*(?:\.\d+)?)\s*([KMBT])?\b/i);
+          if (deletedMatch) {
+            const afterDeleted = afterCreated.slice(deletedMatch.index + deletedMatch[0].length);
+            const writeMatch = afterDeleted.match(/(\d+(?:,\d{3})*(?:\.\d+)?)\s*(TiB|GiB|MiB|KiB|PiB|TB|GB|MB|KB|PB|B)\b/i);
+            if (writeMatch) {
+              hasTrafficCols = true;
+              const cNum = parseFloat(createdMatch[1].replace(/,/g, ''));
+              rawCreatedVal = (cNum === 0) ? '0' : createdMatch[1].replace(/,/g, '');
+              rawCreatedUnit = createdMatch[2] ? createdMatch[2].toUpperCase() : '';
+
+              const wNum = parseFloat(writeMatch[1].replace(/,/g, ''));
+              rawWriteVal = (wNum === 0) ? '0' : writeMatch[1].replace(/,/g, '');
+              rawWriteUnit = writeMatch[2];
+            }
+          }
+        }
+      }
+
+      return {
+        rawSizeNum: totalSizeToken.num,
+        rawSizeStr: totalSizeToken.numStr,
+        rawSizeUnit: totalSizeToken.unit,
+        rawObjStr: rawObjVal,
+        rawObjUnit: rawObjUnit,
+        rawCreatedStr: rawCreatedVal,
+        rawCreatedUnit: rawCreatedUnit,
+        rawWriteStr: rawWriteVal,
+        rawWriteUnit: rawWriteUnit,
+        hasTrafficCols,
+        lastUpdated
+      };
+    }
+
+    // =========================================================================
+    // COMPUTE SHEET DATA FROM PARSED MAPS
+    // =========================================================================
+    function recomputeMainSheets() {
+      const autoConvert = document.getElementById('optAutoConvert').checked;
+      const divisor = parseInt(document.getElementById('optDivisor').value, 10) || 1024;
+
+      state.pctRows = BUCKET_CONFIG.map(cfg => {
+        const p = state.parsedMap[cfg.name];
+        if (!p) {
+          return { found: false, sizeVal: '', sizeUnit: cfg.pctSizeUnit, objVal: '', objUnit: cfg.pctDefaultObjUnit, converted: false, convNote: '' };
+        }
+
+        let sizeVal, sizeUnit, converted = false, convNote = '';
+        if (autoConvert) {
+          const conv = convertSize(p.rawSizeNum, p.rawSizeUnit, cfg.pctSizeUnit, divisor, cfg.pctDecimals);
+          sizeVal = conv.value;
+          sizeUnit = cfg.pctSizeUnit;
+          converted = conv.converted;
+          if (converted) convNote = `${p.rawSizeStr} ${p.rawSizeUnit} → ${sizeVal} ${sizeUnit}`;
+        } else {
+          sizeVal = p.rawSizeStr;
+          sizeUnit = toShortExcelUnit(p.rawSizeUnit);
+        }
+
+        const objVal = p.rawObjStr;
+        const objUnit = p.rawObjUnit || cfg.pctDefaultObjUnit;
+
+        return { found: true, sizeVal, sizeUnit, objVal, objUnit, converted, convNote };
+      });
+
+      state.julRows = BUCKET_CONFIG.map(cfg => {
+        const p = state.parsedMap[cfg.name];
+        if (!p) {
+          return { found: false, sizeVal: '', sizeUnit: cfg.julSizeUnit, objVal: '', objUnit: cfg.julDefaultObjUnit, converted: false, convNote: '' };
+        }
+
+        let sizeVal, sizeUnit, converted = false, convNote = '';
+        if (autoConvert) {
+          const conv = convertSize(p.rawSizeNum, p.rawSizeUnit, cfg.julSizeUnit, divisor, cfg.julDecimals);
+          sizeVal = conv.value;
+          sizeUnit = cfg.julSizeUnit;
+          converted = conv.converted;
+          if (converted) convNote = `${p.rawSizeStr} ${p.rawSizeUnit} → ${sizeVal} ${sizeUnit}`;
+        } else {
+          sizeVal = p.rawSizeStr;
+          sizeUnit = p.rawSizeUnit;
+        }
+
+        const objVal = p.rawObjStr;
+        const objUnit = p.rawObjUnit || cfg.julDefaultObjUnit;
+
+        return { found: true, sizeVal, sizeUnit, objVal, objUnit, converted, convNote };
+      });
+
+      renderMainSheets();
+    }
+
+    function recomputeBk47Sheet() {
+      const autoConvert = document.getElementById('optAutoConvert').checked;
+      const divisor = parseInt(document.getElementById('optDivisor').value, 10) || 1024;
+
+      const p4 = state.parsedMapBk47['kbc_prod_bk4'];
+      if (p4) {
+        const c4 = autoConvert ? convertSize(p4.rawSizeNum, p4.rawSizeUnit, 'GB', divisor, 2).value : p4.rawSizeStr;
+        state.bk47.bk4 = {
+          found: true,
+          sizeVal: c4,
+          sizeUnit: 'GB',
+          objVal: p4.rawObjStr,
+          objUnit: p4.rawObjUnit || 'M',
+          filesVal: p4.rawCreatedStr ?? '0',
+          filesUnit: p4.rawCreatedUnit || 'K',
+          writeVal: p4.rawWriteStr ?? '0',
+          writeUnit: 'MiB'
+        };
+      } else {
+        state.bk47.bk4 = { found: false, sizeVal: '', sizeUnit: 'GB', objVal: '', objUnit: 'M', filesVal: '', filesUnit: 'K', writeVal: '', writeUnit: 'MiB' };
+      }
+
+      const p7 = state.parsedMapBk47['kbc_prod_bk7'];
+      if (p7) {
+        const c7 = autoConvert ? convertSize(p7.rawSizeNum, p7.rawSizeUnit, 'MiB', divisor, 2).value : p7.rawSizeStr;
+        state.bk47.bk7 = {
+          found: true,
+          sizeVal: c7,
+          sizeUnit: 'MiB',
+          objVal: p7.rawObjStr,
+          objUnit: p7.rawObjUnit || 'B',
+          filesVal: p7.rawCreatedStr ?? '0',
+          filesUnit: p7.rawCreatedUnit ? p7.rawCreatedUnit.toLowerCase() : 'k',
+          writeVal: p7.rawWriteStr ?? '0',
+          writeUnit: 'KiB'
+        };
+      } else {
+        state.bk47.bk7 = { found: false, sizeVal: '', sizeUnit: 'MiB', objVal: '', objUnit: 'B', filesVal: '', filesUnit: 'k', writeVal: '', writeUnit: 'KiB' };
+      }
+
+      renderBk47Section();
+    }
+
+    // =========================================================================
+    // RENDER UI
+    // =========================================================================
+    function renderMainSheets() {
+      const foundCount = Object.keys(state.parsedMap).length;
+      const totalCount = BUCKET_CONFIG.length;
+
+      const banner = document.getElementById('statusBanner');
+      const rawText = document.getElementById('rawInput').value.trim();
+
+      if (!rawText && foundCount === 0) {
+        banner.className = 'status-banner idle';
+        banner.innerHTML = 'รอรับข้อมูล 12 Buckets (Day 0)... วางข้อความด้านบน หรือกด "โหลดตัวอย่าง 12 Buckets"';
+      } else if (foundCount === 0) {
+        banner.className = 'status-banner err';
+        banner.innerHTML = '⚠️ ไม่พบชื่อ Bucket ที่รู้จักในข้อความที่วาง กรุณาตรวจสอบว่าคลุมดำรวมคอลัมน์ <strong>Buckets</strong> มาด้วย';
+      } else if (foundCount < totalCount) {
+        const missing = BUCKET_CONFIG.filter(c => !state.parsedMap[c.name]).map(c => c.name);
+        banner.className = 'status-banner warn';
+        banner.innerHTML = `⚠️ พบข้อมูล <strong>${foundCount}/${totalCount}</strong> Buckets — ขาด: <code>${missing.join(', ')}</code>`;
+      } else {
+        const convertedCount = state.julRows.filter(r => r.converted).length;
+        const convText = convertedCount > 0 ? ` | แปลงหน่วยอัตโนมัติ ${convertedCount} ช่อง` : '';
+        banner.className = 'status-banner ok';
+        banner.innerHTML = `✅ อ่านข้อมูลวันนี้ครบทั้ง <strong>${foundCount}/${totalCount}</strong> Buckets เรียบร้อยแล้ว${convText}`;
+      }
+
+      const hasAny = foundCount > 0;
+      document.getElementById('btnCopyPctSize').disabled = !hasAny;
+      document.getElementById('btnCopyPctObj').disabled = !hasAny;
+      document.getElementById('btnCopyJulRow').disabled = !hasAny;
+
+      renderB2Header();
+      renderPctTable();
+      renderJulTable();
+    }
+
+    function renderBk47Section() {
+      const hasBk4 = !!state.parsedMapBk47['kbc_prod_bk4'];
+      const hasBk7 = !!state.parsedMapBk47['kbc_prod_bk7'];
+      const rawText = document.getElementById('rawInputBk47').value.trim();
+      const banner = document.getElementById('statusBannerBk47');
+
+      if (!rawText && !hasBk4 && !hasBk7) {
+        banner.className = 'status-banner idle';
+        banner.innerHTML = 'รอรับข้อมูล Day - 1 สำหรับ <code>kbc_prod_bk4</code> และ <code>kbc_prod_bk7</code>... (วางข้อความด้านบน หรือกด "โหลดตัวอย่าง Day - 1")';
+      } else if (!hasBk4 && !hasBk7) {
+        banner.className = 'status-banner err';
+        banner.innerHTML = '⚠️ ไม่พบข้อมูลของ <code>kbc_prod_bk4</code> หรือ <code>kbc_prod_bk7</code> ในข้อความที่วาง';
+      } else if (hasBk4 && hasBk7) {
+        const p4 = state.parsedMapBk47['kbc_prod_bk4'];
+        const p7 = state.parsedMapBk47['kbc_prod_bk7'];
+        const trafficNote = (p4.hasTrafficCols || p7.hasTrafficCols)
+          ? ' (ดึงค่า Objects Created และ Write Traffic เรียบร้อย)'
+          : ' (ไม่พบคอลัมน์ Objects Created / Write Traffic จึงตั้งค่าเป็น 0 ให้)';
+        banner.className = 'status-banner ok';
+        banner.innerHTML = `✅ อ่านข้อมูล Day - 1 ของ <strong>kbc_prod_bk4</strong> และ <strong>kbc_prod_bk7</strong> ครบเรียบร้อยแล้ว${trafficNote}`;
+      } else {
+        const foundWhich = hasBk4 ? 'kbc_prod_bk4' : 'kbc_prod_bk7';
+        const missWhich = hasBk4 ? 'kbc_prod_bk7' : 'kbc_prod_bk4';
+        banner.className = 'status-banner warn';
+        banner.innerHTML = `⚠️ พบเฉพาะ <strong>${foundWhich}</strong> (ยังขาด <code>${missWhich}</code>)`;
+      }
+
+      document.getElementById('btnCopyBk4').disabled = !hasBk4;
+      document.getElementById('btnCopyBk7').disabled = !hasBk7;
+      document.getElementById('btnCopyBk47Both').disabled = !(hasBk4 || hasBk7);
+
+      renderBk47Table();
+    }
+
+    function renderB2Header() {
+      const dateStr = document.getElementById('inputDate').value;
+      const timeStr = document.getElementById('inputTime').value;
+      if (!dateStr) return;
+
+      const [y, m, d] = dateStr.split('-');
+      let hh = 7, mm = '15', ampm = 'AM';
+      if (timeStr) {
+        const parts = timeStr.split(':');
+        let h24 = parseInt(parts[0], 10);
+        mm = parts[1];
+        ampm = h24 >= 12 ? 'PM' : 'AM';
+        hh = h24 % 12;
+        if (hh === 0) hh = 12;
+      }
+      const hhPad = String(hh).padStart(2, '0');
+      const b2Text = `Total Size S3    ${d}/${m}/${y}  ${hhPad}:${mm} ${ampm}`;
+      document.getElementById('b2Preview').textContent = b2Text;
+    }
+
+    function formatExcelDateFromInput(inputId, style = 'dd-mmm-yyyy') {
+      const dateStr = document.getElementById(inputId).value;
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-').map(Number);
+      if (style === 'd/m/yyyy') {
+        return `${d}/${m}/${y}`;
+      }
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${d}-${months[m - 1]}-${y}`;
+    }
+
+    function renderPctTable() {
+      const tbody = document.getElementById('pctTableBody');
+      tbody.innerHTML = '';
+
+      BUCKET_CONFIG.forEach((cfg, idx) => {
+        const r = state.pctRows[idx];
+        const raw = state.parsedMap[cfg.name];
+        const tr = document.createElement('tr');
+        if (!r.found && Object.keys(state.parsedMap).length > 0) {
+          tr.className = 'missing-row';
+        }
+
+        const numC = parseFloat(r.sizeVal);
+        let pctDisplay = '-';
+        let pctClass = '';
+        if (!isNaN(numC)) {
+          const pct = cfg.pctFormula(numC) * 100;
+          const pctDec = (pct < 1 && pct > 0) ? (pct < 0.05 ? 4 : 2) : 2;
+          pctDisplay = pct.toFixed(pctDec) + '%';
+          if (pct >= 85) pctClass = 'pct-high';
+          else if (pct >= 80) pctClass = 'pct-warn';
+          else pctClass = 'pct-ok';
+        }
+
+        const rawText = raw
+          ? `${raw.rawSizeStr} ${raw.rawSizeUnit} | ${raw.rawObjStr}${raw.rawObjUnit ? ' ' + raw.rawObjUnit : ''}`
+          : '-';
+
+        tr.innerHTML = `
+          <td class="col-ref">${cfg.excelRow}</td>
+          <td class="bucket-name">${cfg.name}<small>${cfg.label !== cfg.name ? cfg.label.replace(cfg.name, '').trim() : ''}</small></td>
+          <td class="num">
+            <input class="cell-edit" data-sheet="pct" data-idx="${idx}" data-field="sizeVal" value="${escapeAttr(r.sizeVal)}" />
+            ${r.converted ? `<span class="conv-badge" title="${escapeAttr(r.convNote)}">แปลงหน่วย</span>` : ''}
+          </td>
+          <td class="unit">
+            <input class="unit-edit" data-sheet="pct" data-idx="${idx}" data-field="sizeUnit" value="${escapeAttr(r.sizeUnit)}" />
+          </td>
+          <td class="num readonly-col">${cfg.capVal}</td>
+          <td class="unit readonly-col">${cfg.capUnit}</td>
+          <td class="num ${pctClass}">${pctDisplay}</td>
+          <td class="num">
+            <input class="cell-edit" data-sheet="pct" data-idx="${idx}" data-field="objVal" value="${escapeAttr(r.objVal)}" />
+          </td>
+          <td class="unit">
+            <input class="unit-edit" data-sheet="pct" data-idx="${idx}" data-field="objUnit" value="${escapeAttr(r.objUnit)}" />
+          </td>
+          <td style="font-size:12px; color:#666; font-family:Consolas,monospace;">${rawText}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      bindEditInputs(tbody);
+    }
+
+    function renderJulTable() {
+      const includeDate = document.getElementById('optJulIncludeDate').checked;
+      document.getElementById('julStartCellTag').textContent = includeDate ? 'A' : 'B';
+
+      const thead = document.getElementById('julTableHead');
+      const tbody = document.getElementById('julTableBody');
+
+      let h1 = '<tr>';
+      let h2 = '<tr>';
+      if (includeDate) {
+        h1 += '<th rowspan="2">Date<br>(Col A)</th>';
+      }
+      BUCKET_CONFIG.forEach(cfg => {
+        h1 += `<th colspan="4">${cfg.name} <span style="font-weight:400; opacity:0.85;">(${cfg.julCols[0]}:${cfg.julCols[3]})</span></th>`;
+        h2 += `<th class="th-sub">Size (${cfg.julCols[0]})</th><th class="th-sub">Unit (${cfg.julCols[1]})</th><th class="th-sub">Obj (${cfg.julCols[2]})</th><th class="th-sub">Unit (${cfg.julCols[3]})</th>`;
+      });
+      h1 += '</tr>';
+      h2 += '</tr>';
+      thead.innerHTML = h1 + h2;
+
+      let rowHtml = '<tr>';
+      if (includeDate) {
+        rowHtml += `<td class="col-ref">${escapeAttr(formatExcelDateFromInput('inputDate', 'dd-mmm-yyyy'))}</td>`;
+      }
+      BUCKET_CONFIG.forEach((cfg, idx) => {
+        const r = state.julRows[idx];
+        const titleAttr = r.converted ? ` title="${escapeAttr(r.convNote)}"` : '';
+        rowHtml += `
+          <td class="num jul-cell-size"${titleAttr}>
+            <input class="cell-edit" style="width:68px;" data-sheet="jul" data-idx="${idx}" data-field="sizeVal" value="${escapeAttr(r.sizeVal)}" />
+            ${r.converted ? '<span class="conv-badge">แปลง</span>' : ''}
+          </td>
+          <td class="unit jul-cell-size">
+            <input class="unit-edit" data-sheet="jul" data-idx="${idx}" data-field="sizeUnit" value="${escapeAttr(r.sizeUnit)}" />
+          </td>
+          <td class="num jul-cell-obj">
+            <input class="cell-edit" style="width:62px;" data-sheet="jul" data-idx="${idx}" data-field="objVal" value="${escapeAttr(r.objVal)}" />
+          </td>
+          <td class="unit jul-cell-obj">
+            <input class="unit-edit" data-sheet="jul" data-idx="${idx}" data-field="objUnit" value="${escapeAttr(r.objUnit)}" />
+          </td>
+        `;
+      });
+      rowHtml += '</tr>';
+      tbody.innerHTML = rowHtml;
+
+      bindEditInputs(tbody);
+      updateJulTsvPreview();
+    }
+
+    function renderBk47Table() {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      document.getElementById('bk4StartCellTag').textContent = incDate ? 'C' : 'D';
+      document.getElementById('bk7StartCellTag').textContent = incDate ? 'M' : 'N';
+      document.getElementById('btnCopyBk4').textContent = `📋 Copy kbc_prod_bk4 (วางที่ช่อง ${incDate ? 'C' : 'D'})`;
+      document.getElementById('btnCopyBk7').textContent = `📋 Copy kbc_prod_bk7 (วางที่ช่อง ${incDate ? 'M' : 'N'})`;
+      document.getElementById('btnCopyBk47Both').textContent = `📋 Copy ทั้งคู่ bk4 + bk7 (วางที่ช่อง ${incDate ? 'C' : 'D'} ทีเดียว)`;
+
+      const b4 = state.bk47.bk4;
+      const b7 = state.bk47.bk7;
+      const dtDisplay = escapeAttr(formatExcelDateFromInput('inputDateBk47', 'd/m/yyyy'));
+
+      const tbody = document.getElementById('bk47TableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td class="col-ref">${dtDisplay}</td>
+          <td class="num bk4-cell"><input class="cell-edit" style="width:68px;" data-sheet="bk4" data-field="sizeVal" value="${escapeAttr(b4.sizeVal)}" /></td>
+          <td class="unit bk4-cell"><input class="unit-edit" data-sheet="bk4" data-field="sizeUnit" value="${escapeAttr(b4.sizeUnit)}" /></td>
+          <td class="num bk4-cell"><input class="cell-edit" style="width:60px;" data-sheet="bk4" data-field="objVal" value="${escapeAttr(b4.objVal)}" /></td>
+          <td class="unit bk4-cell"><input class="unit-edit" data-sheet="bk4" data-field="objUnit" value="${escapeAttr(b4.objUnit)}" /></td>
+          <td class="num bk4-cell"><input class="cell-edit" style="width:60px;" data-sheet="bk4" data-field="filesVal" value="${escapeAttr(b4.filesVal)}" /></td>
+          <td class="unit bk4-cell"><input class="unit-edit" data-sheet="bk4" data-field="filesUnit" value="${escapeAttr(b4.filesUnit)}" /></td>
+          <td class="num bk4-cell"><input class="cell-edit" style="width:68px;" data-sheet="bk4" data-field="writeVal" value="${escapeAttr(b4.writeVal)}" /></td>
+          <td class="unit bk4-cell"><input class="unit-edit" data-sheet="bk4" data-field="writeUnit" value="${escapeAttr(b4.writeUnit)}" /></td>
+          <td class="col-ref">-</td>
+          <td class="col-ref">${dtDisplay}</td>
+          <td class="num bk7-cell"><input class="cell-edit" style="width:68px;" data-sheet="bk7" data-field="sizeVal" value="${escapeAttr(b7.sizeVal)}" /></td>
+          <td class="unit bk7-cell"><input class="unit-edit" data-sheet="bk7" data-field="sizeUnit" value="${escapeAttr(b7.sizeUnit)}" /></td>
+          <td class="num bk7-cell"><input class="cell-edit" style="width:60px;" data-sheet="bk7" data-field="objVal" value="${escapeAttr(b7.objVal)}" /></td>
+          <td class="unit bk7-cell"><input class="unit-edit" data-sheet="bk7" data-field="objUnit" value="${escapeAttr(b7.objUnit)}" /></td>
+          <td class="num bk7-cell"><input class="cell-edit" style="width:60px;" data-sheet="bk7" data-field="filesVal" value="${escapeAttr(b7.filesVal)}" /></td>
+          <td class="unit bk7-cell"><input class="unit-edit" data-sheet="bk7" data-field="filesUnit" value="${escapeAttr(b7.filesUnit)}" /></td>
+          <td class="num bk7-cell"><input class="cell-edit" style="width:68px;" data-sheet="bk7" data-field="writeVal" value="${escapeAttr(b7.writeVal)}" /></td>
+          <td class="unit bk7-cell"><input class="unit-edit" data-sheet="bk7" data-field="writeUnit" value="${escapeAttr(b7.writeUnit)}" /></td>
+        </tr>
+      `;
+
+      bindEditInputs(tbody);
+      updateBk47TsvPreview();
+    }
+
+    function bindEditInputs(container) {
+      container.querySelectorAll('input[data-sheet]').forEach(inp => {
+        inp.addEventListener('change', (e) => {
+          const sheet = e.target.dataset.sheet;
+          const field = e.target.dataset.field;
+          const val = e.target.value.trim();
+          if (sheet === 'pct') {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            state.pctRows[idx][field] = val;
+            renderPctTable();
+          } else if (sheet === 'jul') {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            state.julRows[idx][field] = val;
+            updateJulTsvPreview();
+          } else if (sheet === 'bk4') {
+            state.bk47.bk4[field] = val;
+            updateBk47TsvPreview();
+          } else if (sheet === 'bk7') {
+            state.bk47.bk7[field] = val;
+            updateBk47TsvPreview();
+          }
+        });
+      });
+    }
+
+    function buildJulTsv() {
+      const includeDate = document.getElementById('optJulIncludeDate').checked;
+      const cells = [];
+      if (includeDate) cells.push(formatExcelDateFromInput('inputDate', 'dd-mmm-yyyy'));
+      state.julRows.forEach(r => {
+        cells.push(r.sizeVal, r.sizeUnit, r.objVal, r.objUnit);
+      });
+      return cells.join('\t');
+    }
+
+    function buildBk4Tsv() {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const b = state.bk47.bk4;
+      const cells = [];
+      if (incDate) cells.push(formatExcelDateFromInput('inputDateBk47', 'dd-mmm-yyyy'));
+      cells.push(b.sizeVal, b.sizeUnit, b.objVal, b.objUnit, b.filesVal, b.filesUnit, b.writeVal, b.writeUnit);
+      return cells.join('\t');
+    }
+
+    function buildBk7Tsv() {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const b = state.bk47.bk7;
+      const cells = [];
+      if (incDate) cells.push(formatExcelDateFromInput('inputDateBk47', 'dd-mmm-yyyy'));
+      cells.push(b.sizeVal, b.sizeUnit, b.objVal, b.objUnit, b.filesVal, b.filesUnit, b.writeVal, b.writeUnit);
+      return cells.join('\t');
+    }
+
+    function buildBk47BothTsv() {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const b4 = state.bk47.bk4;
+      const b7 = state.bk47.bk7;
+      const dt = formatExcelDateFromInput('inputDateBk47', 'dd-mmm-yyyy');
+      const cells = [];
+      if (incDate) cells.push(dt);
+      cells.push(b4.sizeVal, b4.sizeUnit, b4.objVal, b4.objUnit, b4.filesVal, b4.filesUnit, b4.writeVal, b4.writeUnit);
+      cells.push('', dt);
+      cells.push(b7.sizeVal, b7.sizeUnit, b7.objVal, b7.objUnit, b7.filesVal, b7.filesUnit, b7.writeVal, b7.writeUnit);
+      return cells.join('\t');
+    }
+
+    function updateJulTsvPreview() {
+      const hasAny = Object.keys(state.parsedMap).length > 0;
+      document.getElementById('julTsvPreview').textContent = hasAny ? buildJulTsv() : '-';
+    }
+
+    function updateBk47TsvPreview() {
+      const hasBk47 = state.bk47.bk4.found || state.bk47.bk7.found;
+      if (!hasBk47) {
+        document.getElementById('bk47TsvPreview').textContent = '-';
+        return;
+      }
+      document.getElementById('bk47TsvPreview').textContent =
+        `[kbc_prod_bk4]  ${buildBk4Tsv()}\n[kbc_prod_bk7]  ${buildBk7Tsv()}`;
+    }
+
+    function escapeAttr(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // =========================================================================
+    // CLIPBOARD & TOAST
+    // =========================================================================
+    let toastTimer = null;
+    function showToast(msg, isSuccess = true) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (isSuccess ? ' success' : '');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.className = 'toast'; }, 2800);
+    }
+
+    async function copyToClipboard(text, successMsg) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        showToast(successMsg, true);
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(successMsg, true);
+      }
+    }
+
+    // =========================================================================
+    // EVENT LISTENERS
+    // =========================================================================
+    function handleMainInputChange() {
+      const raw = document.getElementById('rawInput').value;
+      state.parsedMap = parseWebText(raw);
+      recomputeMainSheets();
+    }
+
+    function handleBk47InputChange() {
+      const raw = document.getElementById('rawInputBk47').value;
+      state.parsedMapBk47 = parseWebText(raw);
+      recomputeBk47Sheet();
+    }
+
+    document.getElementById('rawInput').addEventListener('input', handleMainInputChange);
+    document.getElementById('rawInputBk47').addEventListener('input', handleBk47InputChange);
+
+    document.getElementById('optAutoConvert').addEventListener('change', () => {
+      recomputeMainSheets();
+      recomputeBk47Sheet();
+    });
+    document.getElementById('optDivisor').addEventListener('change', () => {
+      recomputeMainSheets();
+      recomputeBk47Sheet();
+    });
+    document.getElementById('optJulIncludeDate').addEventListener('change', renderJulTable);
+    document.getElementById('optBk47IncludeDate').addEventListener('change', renderBk47Table);
+
+    document.getElementById('inputDate').addEventListener('change', () => {
+      const d0Str = document.getElementById('inputDate').value;
+      if (d0Str) {
+        const [y, m, d] = d0Str.split('-').map(Number);
+        const d1 = new Date(y, m - 1, d - 1);
+        const yy = d1.getFullYear();
+        const mm = String(d1.getMonth() + 1).padStart(2, '0');
+        const dd = String(d1.getDate()).padStart(2, '0');
+        document.getElementById('inputDateBk47').value = `${yy}-${mm}-${dd}`;
+      }
+      renderB2Header();
+      renderJulTable();
+      renderBk47Table();
+    });
+    document.getElementById('inputDateBk47').addEventListener('change', renderBk47Table);
+    document.getElementById('inputTime').addEventListener('change', renderB2Header);
+
+    document.getElementById('btnPasteClipboard').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('rawInput').value = text;
+          handleMainInputChange();
+          showToast('📋 วางข้อมูลวันนี้ (12 Buckets) เรียบร้อยแล้ว!');
+        } else {
+          showToast('Clipboard ว่างอยู่', false);
+        }
+      } catch (e) {
+        document.getElementById('rawInput').focus();
+        showToast('กรุณากด Ctrl+V ในช่องข้อความด้านบน', false);
+      }
+    });
+
+    document.getElementById('btnLoadSample').addEventListener('click', () => {
+      document.getElementById('rawInput').value = SAMPLE_DATA;
+      handleMainInputChange();
+      showToast('🧪 โหลดตัวอย่าง 12 Buckets เรียบร้อย!');
+    });
+
+    document.getElementById('btnClear').addEventListener('click', () => {
+      document.getElementById('rawInput').value = '';
+      state.parsedMap = {};
+      recomputeMainSheets();
+      showToast('🗑️ ล้างข้อมูล 12 Buckets แล้ว', false);
+    });
+
+    document.getElementById('btnPasteBk47Clipboard').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('rawInputBk47').value = text;
+          handleBk47InputChange();
+          showToast('📋 วางข้อมูล Day - 1 (bk4, bk7) เรียบร้อยแล้ว!');
+        } else {
+          showToast('Clipboard ว่างอยู่', false);
+        }
+      } catch (e) {
+        document.getElementById('rawInputBk47').focus();
+        showToast('กรุณากด Ctrl+V ในช่องข้อความ Day - 1', false);
+      }
+    });
+
+    document.getElementById('btnLoadSampleBk47').addEventListener('click', () => {
+      document.getElementById('rawInputBk47').value = SAMPLE_BK47_TRAFFIC;
+      handleBk47InputChange();
+      showToast('🧪 โหลดตัวอย่าง Day - 1 (จากภาพ 3) เรียบร้อย!');
+    });
+
+    document.getElementById('btnClearBk47').addEventListener('click', () => {
+      document.getElementById('rawInputBk47').value = '';
+      state.parsedMapBk47 = {};
+      recomputeBk47Sheet();
+      showToast('🗑️ ล้างข้อมูล Day - 1 แล้ว', false);
+    });
+
+    document.getElementById('btnCopyB2').addEventListener('click', () => {
+      const text = document.getElementById('b2Preview').textContent;
+      copyToClipboard(text, '✅ คัดลอกหัวตารางแล้ว! ไปวางที่ช่อง B2 ชีท %%%');
+    });
+
+    document.getElementById('btnCopyPctSize').addEventListener('click', () => {
+      const incUnit = document.getElementById('optPctIncludeUnit').checked;
+      const lines = state.pctRows.map(r => incUnit ? `${r.sizeVal}\t${r.sizeUnit}` : `${r.sizeVal}`);
+      const range = incUnit ? 'C4:D15' : 'C4:C15';
+      copyToClipboard(lines.join('\r\n'), `✅ คัดลอก Total Size แล้ว! คลิกช่อง C4 ชีท %%% แล้วกด Ctrl+V (${range})`);
+    });
+
+    document.getElementById('btnCopyPctObj').addEventListener('click', () => {
+      const incUnit = document.getElementById('optPctIncludeUnit').checked;
+      const lines = state.pctRows.map(r => incUnit ? `${r.objVal}\t${r.objUnit}` : `${r.objVal}`);
+      const range = incUnit ? 'H4:I15' : 'H4:H15';
+      copyToClipboard(lines.join('\r\n'), `✅ คัดลอก Object Count แล้ว! คลิกช่อง H4 ชีท %%% แล้วกด Ctrl+V (${range})`);
+    });
+
+    document.getElementById('btnCopyJulRow').addEventListener('click', () => {
+      const incDate = document.getElementById('optJulIncludeDate').checked;
+      const col = incDate ? 'A' : 'B';
+      copyToClipboard(buildJulTsv(), `✅ คัดลอก 1 แถวครบ 12 Buckets แล้ว! คลิกช่อง ${col} ของวันนี้ในชีท Total Size Jul 2025 แล้วกด Ctrl+V`);
+    });
+
+    document.getElementById('btnCopyBk4').addEventListener('click', () => {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const col = incDate ? 'C' : 'D';
+      copyToClipboard(buildBk4Tsv(), `✅ คัดลอก kbc_prod_bk4 (Day - 1) แล้ว! คลิกช่อง ${col} ในชีท kbc_prod_bk4,7 แล้วกด Ctrl+V`);
+    });
+
+    document.getElementById('btnCopyBk7').addEventListener('click', () => {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const col = incDate ? 'M' : 'N';
+      copyToClipboard(buildBk7Tsv(), `✅ คัดลอก kbc_prod_bk7 (Day - 1) แล้ว! คลิกช่อง ${col} ในชีท kbc_prod_bk4,7 แล้วกด Ctrl+V`);
+    });
+
+    document.getElementById('btnCopyBk47Both').addEventListener('click', () => {
+      const incDate = document.getElementById('optBk47IncludeDate').checked;
+      const col = incDate ? 'C' : 'D';
+      copyToClipboard(buildBk47BothTsv(), `✅ คัดลอกทั้ง bk4 + bk7 (Day - 1) แล้ว! คลิกช่อง ${col} ในชีท kbc_prod_bk4,7 แล้วกด Ctrl+V ครั้งเดียวจบ`);
+    });
+
+    // =========================================================================
+    // INIT: SET TODAY'S DATE (DAY 0) & YESTERDAY'S DATE (DAY - 1)
+    // =========================================================================
+    (function init() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mi = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('inputDate').value = `${yyyy}-${mm}-${dd}`;
+      document.getElementById('inputTime').value = `${hh}:${mi}`;
+
+      const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+      const yY = yesterday.getFullYear();
+      const yM = String(yesterday.getMonth() + 1).padStart(2, '0');
+      const yD = String(yesterday.getDate()).padStart(2, '0');
+      document.getElementById('inputDateBk47').value = `${yY}-${yM}-${yD}`;
+
+      recomputeMainSheets();
+      recomputeBk47Sheet();
+    })();
+  </script>
+</body>
+</html>
