@@ -3,22 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passport Change Tool_V8 by Daiice</title>
+    <title>Passport Change Tool_V10 by Daiice</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -27,363 +21,460 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
         }
-        
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
         .links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            display: flex; gap: 20px; justify-content: center;
+            margin-top: 15px; flex-wrap: wrap;
         }
-        
         .links a {
-            color: white;
-            text-decoration: none;
+            color: white; text-decoration: none;
             background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: all 0.3s;
+            padding: 8px 16px; border-radius: 20px; transition: all 0.3s;
         }
-        
-        .links a:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
+        .links a:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .content { padding: 30px; }
         .section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            margin-bottom: 30px; padding: 25px;
+            background: #f8f9fa; border-radius: 10px;
             border-left: 4px solid #667eea;
         }
-        
-        .section h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        
+        .section h2 { color: #667eea; margin-bottom: 15px; font-size: 20px; }
         .credentials {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ffc107;
+            background: #fff3cd; padding: 15px; border-radius: 8px;
+            margin-bottom: 20px; border-left: 4px solid #ffc107;
         }
-        
-        .credentials strong {
-            color: #856404;
-        }
-        
-        .input-group {
-            margin-bottom: 15px;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
-        }
-        
+        .credentials strong { color: #856404; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #333; font-weight: 600; }
         .input-group input, .input-group textarea, .input-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border 0.3s;
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 14px; transition: border 0.3s;
         }
-        
         .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
-            outline: none;
-            border-color: #667eea;
+            outline: none; border-color: #667eea;
         }
-        
-        .input-group textarea {
-            min-height: 100px;
-            font-family: monospace;
-        }
-        
+        .input-group textarea { min-height: 100px; font-family: monospace; }
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-right: 10px;
-            margin-bottom: 10px;
+            color: white; border: none; padding: 12px 30px;
+            border-radius: 8px; cursor: pointer; font-size: 16px;
+            font-weight: 600; transition: all 0.3s;
+            margin-right: 10px; margin-bottom: 10px;
         }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-secondary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
-        
+        .btn-secondary:hover { box-shadow: 0 5px 15px rgba(40,167,69,0.4); }
         .output {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-height: 400px;
-            overflow-y: auto;
-            position: relative;
+            background: #1e1e1e; color: #d4d4d4; padding: 20px;
+            border-radius: 8px; margin-top: 15px;
+            font-family: 'Courier New', monospace; font-size: 14px;
+            white-space: pre-wrap; word-wrap: break-word;
+            max-height: 400px; overflow-y: auto; position: relative;
         }
-        
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 8px 16px;
-            font-size: 12px;
-        }
-        
+        .copy-btn { position: absolute; top: 10px; right: 10px; padding: 8px 16px; font-size: 12px; }
         .json-output {
-            background: #282c34;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-            overflow-x: auto;
-            position: relative;
-            max-height: 500px;
-            overflow-y: auto;
+            background: #282c34; padding: 20px; border-radius: 8px;
+            margin-top: 15px; overflow-x: auto; position: relative;
+            max-height: 500px; overflow-y: auto;
         }
-        
-        .json-output pre {
-            margin: 0;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        
+        .json-output pre { margin: 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
         .json-key { color: #e06c75; }
         .json-string { color: #98c379; }
         .json-number { color: #d19a66; }
         .json-boolean { color: #56b6c2; }
         .json-null { color: #c678dd; }
-        
         .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #28a745;
+            background: #d4edda; color: #155724; padding: 15px;
+            border-radius: 8px; margin-top: 15px; border-left: 4px solid #28a745;
         }
-        
         .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
+            display: flex; gap: 10px; margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0; flex-wrap: wrap;
         }
-        
         .tab {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
+            padding: 12px 24px; background: transparent; border: none;
+            border-bottom: 3px solid transparent; cursor: pointer;
+            font-weight: 600; color: #666; transition: all 0.3s;
+        }
+        .tab.active { color: #667eea; border-bottom-color: #667eea; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .doc-type-info {
+            margin-top: 20px; padding: 15px; background: #e3f2fd;
+            border-radius: 8px; border-left: 4px solid #2196F3;
+        }
+        .doc-type-info h3 { color: #1976D2; margin-bottom: 10px; }
+        .doc-type-info ul { list-style: none; padding: 0; }
+        .doc-type-info li { padding: 5px 0; }
+
+        /* Script mode selector */
+        .script-mode-selector {
+            display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;
+        }
+        .mode-btn {
+            flex: 1; min-width: 180px; padding: 15px 20px;
+            border-radius: 10px; border: 2px solid #e0e0e0;
+            background: white; color: #666; font-size: 14px;
+            cursor: pointer; transition: all 0.3s; text-align: center;
+            font-weight: 600; line-height: 1.4;
+        }
+        .mode-btn:hover { border-color: #667eea; color: #667eea; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.2); }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+        }
+        .mode-btn .mode-icon { font-size: 22px; display: block; margin-bottom: 5px; }
+        .mode-btn .mode-label { display: block; font-size: 13px; }
+        .script-panel { display: none; }
+        .script-panel.active { display: block; }
+        .divider {
+            border: none; border-top: 2px dashed #e0e0e0;
+            margin: 20px 0;
+        }
+        .info-box {
+            padding: 12px 16px; border-radius: 8px; margin-bottom: 15px;
+            font-size: 13px; border-left: 4px solid;
+        }
+        .info-box.blue { background: #e3f2fd; border-color: #2196F3; color: #0c5460; }
+        .info-box.orange { background: #fff3cd; border-color: #ffc107; color: #856404; }
+
+        /* ServiceNow Guide Styles */
+        .snow-guide {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .snow-guide h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        .snow-subhead {
+            font-size: 16px;
+            color: #333;
+            margin-top: 10px;
+            margin-bottom: 12px;
             font-weight: 600;
-            color: #666;
+        }
+        .snow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .snow-field {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+        .snow-field.must-fill {
+            background: #fff8e6;
+            border: 2px solid #ff9800;
+            box-shadow: 0 2px 6px rgba(255, 152, 0, 0.15);
+        }
+        .snow-field.auto-fill {
+            background: #eceff1;
+            border: 2px dashed #cfd8dc;
+        }
+        .snow-field .field-label {
+            font-size: 15px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .snow-field.must-fill .field-label {
+            color: #d84315;
+        }
+        .snow-field.auto-fill .field-label {
+            color: #607d8b;
+        }
+        .snow-field .field-label .req {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .snow-field .field-badge {
+            display: inline-block;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 6px;
+            font-weight: 600;
+        }
+        .snow-field.must-fill .field-badge {
+            background: #ff9800;
+            color: white;
+        }
+        .snow-field.auto-fill .field-badge {
+            background: #b0bec5;
+            color: #263238;
+        }
+        .snow-field .field-value {
+            font-size: 16px;
+            color: #212529;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        .snow-field.must-fill .field-value {
+            color: #bf360c;
+        }
+        .snow-field.auto-fill .field-value {
+            color: #546e7a;
+        }
+        .snow-link-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 18px;
             transition: all 0.3s;
         }
-        
-        .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .doc-type-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
-            border-radius: 8px;
-            border-left: 4px solid #2196F3;
-        }
-        
-        .doc-type-info h3 {
-            color: #1976D2;
-            margin-bottom: 10px;
-        }
-        
-        .doc-type-info ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .doc-type-info li {
-            padding: 5px 0;
+        .snow-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.4);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔐 Passport Change Tool_V8 by Daiice</h1>
-            <div class="links">
-                <a href="https://infraelk.kasikornbank.com" target="_blank">PRD Site</a>
-                <a href="https://infraelkdr.kasikornbank.com" target="_blank">DR Site</a>
+<div class="container">
+    <div class="header">
+        <h1>🔐 Passport Change Tool_V10 by Daiice</h1>
+        <div class="links">
+            <a href="https://infraelk.kasikornbank.com" target="_blank">PRD Site</a>
+            <a href="https://infraelkdr.kasikornbank.com" target="_blank">DR Site</a>
+            <a href="https://kasikornbank.service-now.com/sp?id=sc_cat_item&sys_id=4075df6f1b6e3514dc6887fee54bcbc6&referrer=popular_items" target="_blank">ServiceNow (DBA Request)</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(event,'wsa')">WSA Queries</button>
+            <button class="tab" onclick="switchTab(event,'json')">JSON Formatter</button>
+            <button class="tab" onclick="switchTab(event,'wgw')">WGW Queries</button>
+            <button class="tab" onclick="switchTab(event,'messages')">Messages</button>
+            <button class="tab" onclick="switchTab(event,'scripts')">SQL Scripts</button>
+        </div>
+
+        <!-- ===== WSA Tab ===== -->
+        <div id="wsa" class="tab-content active">
+            <div class="credentials">
+                <strong>WSA Credentials:</strong> Username: redex.usr | Password: r3d3x@Log1nelk **รหัสอาจมีการเปลี่ยนแปลงเช็คอัปเดตกับทีมอีกครั้ง
+            </div>
+            <div class="section">
+                <h2>1. หา Customer ID ด้วย Phone Number</h2>
+                <div class="input-group">
+                    <label>Phone Number:</label>
+                    <input type="text" id="phone" placeholder="0837362743" oninput="syncData()">
+                </div>
+                <button onclick="generateQuery1()">สร้างคำสั่ง ELK</button>
+                <div id="output1" class="output" style="display:none;"></div>
+            </div>
+            <div class="section">
+                <h2>2. หา CitizenId และ CisId ด้วย Phone Number</h2>
+                <div class="input-group">
+                    <label>Phone Number: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 1)</small></label>
+                    <input type="text" id="phone2" readonly style="background:#e5e5e5;">
+                </div>
+                <button onclick="generateQuery2()">สร้างคำสั่ง ELK</button>
+                <div id="output2" class="output" style="display:none;"></div>
+                <h3 style="margin-top:20px;color:#666;">กรอกผลลัพธ์ที่ได้จาก ELK:</h3>
+                <div class="input-group">
+                    <label>CitizenId (New Passport):</label>
+                    <input type="text" id="citizenIdFromElk" placeholder="EM5818511" oninput="syncData()">
+                </div>
+                <div class="input-group">
+                    <label>CisId:</label>
+                    <input type="text" id="cisIdFromElk" placeholder="0041940128" oninput="syncData()">
+                </div>
+            </div>
+            <div class="section">
+                <h2>3. หา Investor ID ด้วย Customer ID</h2>
+                <div class="input-group">
+                    <label>Customer ID:</label>
+                    <input type="text" id="customerId" placeholder="fb7671de-80bb-478a-b341-37e0738b1223" oninput="syncData()">
+                </div>
+                <button onclick="generateQuery3()">สร้างคำสั่ง ELK</button>
+                <div id="output3" class="output" style="display:none;"></div>
+            </div>
+            <div class="section">
+                <h2>4. หา Request-Id ด้วย Investor ID</h2>
+                <div class="input-group">
+                    <label>Investor ID:</label>
+                    <input type="text" id="investorId" placeholder="a95d582660fd49e3b4c7bd2e0ff45f4b" oninput="syncData()">
+                </div>
+                <button onclick="generateQuery4()">สร้างคำสั่ง ELK</button>
+                <div id="output4" class="output" style="display:none;"></div>
+            </div>
+            <div class="section">
+                <h2>5. หา Log Response ด้วย Request-Id</h2>
+                <div class="input-group">
+                    <label>Request-Id:</label>
+                    <input type="text" id="requestId" placeholder="80800_20250910_32VMk86BJkXBKpLewfuG3w38E6D" oninput="syncData()">
+                </div>
+                <button onclick="generateQuery5()">สร้างคำสั่ง ELK</button>
+                <div id="output5" class="output" style="display:none;"></div>
             </div>
         </div>
-        
-        <div class="content">
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab(event, 'wsa')">WSA Queries</button>
-                <button class="tab" onclick="switchTab(event, 'json')">JSON Formatter</button>
-                <button class="tab" onclick="switchTab(event, 'wgw')">WGW Queries</button>
-                <button class="tab" onclick="switchTab(event, 'messages')">Messages</button>
-                <button class="tab" onclick="switchTab(event, 'scripts')">SQL Scripts</button>
+
+        <!-- ===== JSON Formatter Tab ===== -->
+        <div id="json" class="tab-content">
+            <div class="section">
+                <h2>6. JSON Formatter</h2>
+                <div class="input-group">
+                    <label>วาง JSON ที่มี \" :</label>
+                    <textarea id="jsonInput" placeholder='{"header":{"requestId":"...",...}}'></textarea>
+                </div>
+                <button onclick="formatJSON()">แปลงและจัดรูปแบบ JSON</button>
+                <div id="jsonOutput" class="json-output" style="display:none;"></div>
             </div>
-            
-            <!-- WSA Tab -->
-            <div id="wsa" class="tab-content active">
-                <div class="credentials">
-                    <strong>WSA Credentials:</strong> Username: redex.usr | Password: r3d3x@Log1nelk **รหัสอาจมีการเปลี่ยนแปลงเช็คอัปเดตกับทีมอีกครั้ง
-                </div>
-                
-                <div class="section">
-                    <h2>1. หา Customer ID ด้วย Phone Number</h2>
-                    <div class="input-group">
-                        <label>Phone Number:</label>
-                        <input type="text" id="phone" placeholder="0837362743" oninput="syncData()">
-                    </div>
-                    <button onclick="generateQuery1()">สร้างคำสั่ง ELK</button>
-                    <div id="output1" class="output" style="display:none;"></div>
-                </div>
-                
-                <div class="section">
-                    <h2>2. หา CitizenId และ CisId ด้วย Phone Number</h2>
-                    <div class="input-group">
-                        <label>Phone Number: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 1)</small></label>
-                        <input type="text" id="phone2" readonly style="background:#e5e5e5;">
-                    </div>
-                    <button onclick="generateQuery2()">สร้างคำสั่ง ELK</button>
-                    <div id="output2" class="output" style="display:none;"></div>
-                    
-                    <h3 style="margin-top: 20px; color: #666;">กรอกผลลัพธ์ที่ได้จาก ELK:</h3>
-                    <div class="input-group">
-                        <label>CitizenId (New Passport):</label>
-                        <input type="text" id="citizenIdFromElk" placeholder="EM5818511" oninput="syncData()">
-                    </div>
-                    <div class="input-group">
-                        <label>CisId:</label>
-                        <input type="text" id="cisIdFromElk" placeholder="0041940128" oninput="syncData()">
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h2>3. หา Investor ID ด้วย Customer ID</h2>
-                    <div class="input-group">
-                        <label>Customer ID:</label>
-                        <input type="text" id="customerId" placeholder="fb7671de-80bb-478a-b341-37e0738b1223" oninput="syncData()">
-                    </div>
-                    <button onclick="generateQuery3()">สร้างคำสั่ง ELK</button>
-                    <div id="output3" class="output" style="display:none;"></div>
-                </div>
-                
-                <div class="section">
-                    <h2>4. หา Request-Id ด้วย Investor ID</h2>
-                    <div class="input-group">
-                        <label>Investor ID:</label>
-                        <input type="text" id="investorId" placeholder="a95d582660fd49e3b4c7bd2e0ff45f4b" oninput="syncData()">
-                    </div>
-                    <button onclick="generateQuery4()">สร้างคำสั่ง ELK</button>
-                    <div id="output4" class="output" style="display:none;"></div>
-                </div>
-                
-                <div class="section">
-                    <h2>5. หา Log Response ด้วย Request-Id</h2>
-                    <div class="input-group">
-                        <label>Request-Id:</label>
-                        <input type="text" id="requestId" placeholder="80800_20250910_32VMk86BJkXBKpLewfuG3w38E6D" oninput="syncData()">
-                    </div>
-                    <button onclick="generateQuery5()">สร้างคำสั่ง ELK</button>
-                    <div id="output5" class="output" style="display:none;"></div>
-                </div>
+        </div>
+
+        <!-- ===== WGW Tab ===== -->
+        <div id="wgw" class="tab-content">
+            <div class="info-box orange" style="font-size: 15px;">
+                ⚠️ <strong>หมายเหตุ (V10):</strong> ข้อ 7 และ 8 ไม่สามารถหาเองใน ELK ได้แล้ว ต้องทำการเปิด Request (RTM) บนระบบ ServiceNow เพื่อส่งคำสั่ง SQL ให้ <strong>DBA Query</strong> ข้อมูลกลับมาให้
             </div>
-            
-            <!-- JSON Formatter Tab -->
-            <div id="json" class="tab-content">
-                <div class="section">
-                    <h2>6. JSON Formatter</h2>
-                    <div class="input-group">
-                        <label>วาง JSON ที่มี \" :</label>
-                        <textarea id="jsonInput" placeholder='{"header":{"requestId":"...",...}}'></textarea>
+
+            <div class="section">
+                <h2>7 - 8. เปิด Request (RTM) ให้ DBA Query ข้อมูล (docId, Document Type)</h2>
+
+                <!-- ขั้นตอนการเปิด Request บน ServiceNow -->
+                <div class="snow-guide">
+                    <h3>ขั้นตอนที่ 1: เปิดหน้าเว็บ ServiceNow และกรอกข้อมูลขอเปิดเลข RTM</h3><br>
+                    <a href="https://kasikornbank.service-now.com/sp?id=sc_cat_item&sys_id=4075df6f1b6e3514dc6887fee54bcbc6&referrer=popular_items" target="_blank" class="snow-link-btn">
+                        🌐 คลิกเพื่อเปิดหน้าเว็บ ServiceNow (DBA Request)
+                    </a>
+
+                    <div style="margin-bottom: 15px; font-size: 15px;">
+                        <span style="display:inline-block; background:#fff8e6; border:2px solid #ff9800; padding:4px 12px; border-radius:6px; font-weight:600; color:#bf360c; margin-right:10px;">🟠 กรอบสีส้ม = ช่องที่ต้องเลือก / กรอกเอง</span>
+                        <span style="display:inline-block; background:#eceff1; border:2px dashed #cfd8dc; padding:4px 12px; border-radius:6px; font-weight:600; color:#546e7a;">⚪ กรอบสีเทา = ระบบดึงข้อมูลให้อัตโนมัติ (Auto)</span>
                     </div>
-                    <button onclick="formatJSON()">แปลงและจัดรูปแบบ JSON</button>
-                    <div id="jsonOutput" class="json-output" style="display:none;"></div>
+
+                    <p class="snow-subhead">1.1 กรอกข้อมูล Request Details:</p>
+                    <div class="snow-grid">
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Activity <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">Production</div>
+                        </div>
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Database Brand <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">Oracle</div>
+                        </div>
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Database Activity <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">Export data for application team PRD env.</div>
+                        </div>
+                    </div>
+
+                    <p class="snow-subhead">1.2 กรอกข้อมูล Application Portfolio Information (ต้องเลือกก่อนกดปุ่ม Add):</p>
+                    <div class="snow-grid">
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Application ID <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">805 | Wealth Gateway</div>
+                        </div>
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Environment <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">PRD</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Application Acronym <span class="field-badge">Auto</span></div>
+                            <div class="field-value">WGW</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Application Name <span class="field-badge">Auto</span></div>
+                            <div class="field-value">Wealth Gateway</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Application Tier <span class="field-badge">Auto</span></div>
+                            <div class="field-value">Premium</div>
+                        </div>
+                    </div>
+
+                    <p class="snow-subhead">
+                        1.3 หัวข้อ <span style="color:#dc3545;">*</span> Please specific Hostname Information database:
+                    </p>
+                    <div class="info-box blue" style="margin-bottom:15px; font-size:15px; line-height:1.6;">
+                        1. หลังจากเลือก <strong>Application ID (805 | Wealth Gateway)</strong> และ <strong>Environment (PRD)</strong> ด้านบนแล้ว ให้กดปุ่ม <span style="background:#198754; color:white; padding:3px 12px; border-radius:4px; font-weight:600;">Add</span> สีเขียว<br>
+                        2. ในหน้าต่าง <strong>Add Row</strong> ระบบจะดึง <strong>Application Id = 805</strong> และ <strong>Environment = PRD</strong> มาให้ ให้เลือกช่อง <strong>Hostname</strong> เป็น <code>pprdlrwgwdb01</code> แล้วกดปุ่ม <span style="background:#198754; color:white; padding:3px 12px; border-radius:4px; font-weight:600;">Add</span>
+                    </div>
+                    <div class="snow-grid">
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Application Id <span class="field-badge">ดึงจากข้อ 1.2</span></div>
+                            <div class="field-value">805</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Environment <span class="field-badge">ดึงจากข้อ 1.2</span></div>
+                            <div class="field-value">PRD</div>
+                        </div>
+                        <div class="snow-field must-fill">
+                            <div class="field-label"><span class="req">*</span> Hostname <span class="field-badge">ต้องเลือก</span></div>
+                            <div class="field-value">pprdlrwgwdb01</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">IP Address <span class="field-badge">Auto</span></div>
+                            <div class="field-value">10.46.81.19</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Platform <span class="field-badge">Auto</span></div>
+                            <div class="field-value">Linux Red Hat</div>
+                        </div>
+                        <div class="snow-field auto-fill">
+                            <div class="field-label">Database Name <span class="field-badge">ไม่ต้องกรอก</span></div>
+                            <div class="field-value">(เว้นว่าง)</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- WGW Tab -->
-            <div id="wgw" class="tab-content">
-                <div class="credentials">
-                    <strong>WGW Credentials:</strong> Username: wgwusr | Password: V7xx15DPMI83k0 **รหัสอาจมีการเปลี่ยนแปลงเช็คอัปเดตกับทีมอีกครั้ง
-                </div>
-                
-                <div class="section">
-                    <h2>7. หา docId ด้วย Request-Id หรือ Investor ID</h2>
+
+                <!-- สร้างคำสั่ง SQL และ Additional Info -->
+                <div class="snow-guide">
+                    <h3>ขั้นตอนที่ 2: สร้างข้อความช่อง Additional Info และ Work notes</h3>
                     <div class="input-group">
-						<label>Investor ID: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 4)</small></label>
+                        <label>INC Number: <small style="color:#999;">(ซิงค์กับข้อ 9 อัตโนมัติ)</small></label>
+                        <input type="text" id="incNumWgw" placeholder="INC000000814529" oninput="syncFromWgwInc()">
+                    </div>
+                    <div class="input-group">
+                        <label>Investor ID: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 4)</small></label>
                         <input type="text" id="investorId2" readonly style="background:#e5e5e5;">
-                        <label>Request-Id: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 5)</small></label>
-                        <input type="text" id="requestId2" readonly style="background:#e5e5e5;">
                     </div>
-                    <button onclick="generateQuery7()">สร้างคำสั่ง ELK (Request-Id)</button>
-                    <div id="output7" class="output" style="display:none;"></div>
-                    
-                    <h3 style="margin-top: 20px; color: #666;">กรอกผลลัพธ์ที่ได้จาก ELK:</h3>
                     <div class="input-group">
-                        <label>docId (Old Passport):</label>
+                        <label>User คนส่ง <small style="color:#999;">(สำหรับใส่ในข้อความ Work notes)</small>:</label>
+                        <input type="text" id="senderUser" placeholder="ระบุชื่อ User คนส่ง" oninput="syncData()">
+                    </div>
+
+                    <button class="btn-secondary" onclick="generateSnowAdditionalInfo()">📋 สร้างข้อความ Additional Info (ServiceNow)</button>
+                    <button onclick="generateWorkNotes()">📝 สร้างข้อความสำหรับ Work notes</button>
+
+                    <div id="outputSnowInfo" class="output" style="display:none;"></div>
+                    <div id="outputWorkNotes" class="output" style="display:none;"></div>
+                </div>
+
+                <!-- กรอกผลลัพธ์ที่ได้จาก DBA -->
+                <div class="snow-guide">
+                    <h3>ขั้นตอนที่ 3: กรอกผลลัพธ์ที่ได้จาก DBA</h3>
+                    <div class="input-group">
+                        <label>7. DOC_ID / docId (Old Passport):</label>
                         <input type="text" id="docIdFromElk" placeholder="E41874011" oninput="syncData()">
                     </div>
-                </div>
-                
-                <div class="section">
-                    <h2>8. หา Document Type</h2>
-                    <div class="input-group">
-                        <label>docId (Old Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 7)</small></label>
-                        <input type="text" id="docIdForType" readonly style="background:#e5e5e5;">
-                    </div>
-                    <button onclick="generateQuery8()">สร้างคำสั่ง ELK</button>
-                    <div id="output8" class="output" style="display:none;"></div>
-                    
-                    <div class="doc-type-info">
+
+                    <div class="doc-type-info" style="margin-top:10px; margin-bottom:15px;">
                         <h3>Document Type Codes:</h3>
                         <ul>
                             <li><strong>11</strong> = บัตรประชาชน</li>
@@ -393,74 +484,98 @@
                             <li><strong>99</strong> = เอกสารอื่นๆ</li>
                         </ul>
                     </div>
-                    
-                    <h3 style="margin-top: 20px; color: #666;">กรอกผลลัพธ์ที่ได้จาก ELK:</h3>
+
                     <div class="input-group">
-                        <label>Document Type (Old):</label>
+                        <label>8. DOC_TYPE / Document Type (Old):</label>
                         <input type="text" id="docTypeOld" placeholder="12" oninput="syncData()">
                     </div>
+
+                    <input type="hidden" id="cifNumOld">
                 </div>
             </div>
-            
-            <!-- Messages Tab -->
-            <div id="messages" class="tab-content">
-                <div class="section">
-                    <h2>9. ข้อความสำหรับห้อง [WSA x Redex x Inc Team] Production Support</h2>
-                    <div class="input-group">
-                        <label>INC Number:</label>
-                        <input type="text" id="incNum" placeholder="INC000000814529" oninput="syncData()">
-                    </div>
-                    <div class="input-group">
-                        <label>Phone: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 1)</small></label>
-                        <input type="text" id="msgPhone" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>CitizenId (New Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 2)</small></label>
-                        <input type="text" id="citizenId" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>docId (Old Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 7)</small></label>
-                        <input type="text" id="docId" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>CisId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 2)</small></label>
-                        <input type="text" id="cisId" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>customerId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 3)</small></label>
-                        <input type="text" id="customerId2" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>InvestorId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 4)</small></label>
-                        <input type="text" id="investorId3" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>Request-Id: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 5)</small></label>
-                        <input type="text" id="requestId3" readonly style="background:#e5e5e5;">
-                    </div>
-                    <div class="input-group">
-                        <label>Response JSON: <small style="color:#999;">(จะถูกกรอกอัตโนมัติจากข้อ 6)</small></label>
-                        <textarea id="responseJson" readonly style="background:#e5e5e5;"></textarea>
-                    </div>
-                    <button onclick="generateMessage1()">สร้างข้อความ</button>
-                    <div id="message1Output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- ===== Messages Tab ===== -->
+        <div id="messages" class="tab-content">
+            <div class="section">
+                <h2>9. ข้อความสำหรับห้อง [WSA x Redex x Inc Team] Production Support</h2>
+                <div class="input-group">
+                    <label>INC Number:</label>
+                    <input type="text" id="incNum" placeholder="INC000000814529" oninput="syncData()">
                 </div>
-                
-                <div class="section">
-                    <h2>10. ข้อความสำหรับห้อง App Support – WGW</h2>
-                    <div class="input-group">
-                        <label>Patch Date:</label>
-                        <input type="date" id="patchDate" oninput="syncData()">
-                    </div>
-                    <button onclick="generateMessage2()">สร้างข้อความ</button>
-                    <div id="message2Output" class="output" style="display:none;"></div>
+                <div class="input-group">
+                    <label>Phone: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 1)</small></label>
+                    <input type="text" id="msgPhone" readonly style="background:#e5e5e5;">
                 </div>
+                <div class="input-group">
+                    <label>CitizenId (New Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 2)</small></label>
+                    <input type="text" id="citizenId" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>docId (Old Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 7)</small></label>
+                    <input type="text" id="docId" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>CisId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 2)</small></label>
+                    <input type="text" id="cisId" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>customerId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 3)</small></label>
+                    <input type="text" id="customerId2" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>InvestorId: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 4)</small></label>
+                    <input type="text" id="investorId3" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>Request-Id: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 5)</small></label>
+                    <input type="text" id="requestId3" readonly style="background:#e5e5e5;">
+                </div>
+                <div class="input-group">
+                    <label>Response JSON: <small style="color:#999;">(จะถูกกรอกอัตโนมัติจากข้อ 6)</small></label>
+                    <textarea id="responseJson" readonly style="background:#e5e5e5;"></textarea>
+                </div>
+                <button onclick="generateMessage1()">สร้างข้อความ</button>
+                <div id="message1Output" class="output" style="display:none;"></div>
             </div>
-            
-            <!-- SQL Scripts Tab -->
-            <div id="scripts" class="tab-content">
-                <div class="section">
-                    <h2>11. สร้าง SQL Script Files</h2>
+            <div class="section">
+                <h2>10. ข้อความสำหรับห้อง App Support – WGW</h2>
+                <div class="input-group">
+                    <label>Patch Date:</label>
+                    <input type="date" id="patchDate" oninput="syncData()">
+                </div>
+                <button onclick="generateMessage2()">สร้างข้อความ</button>
+                <div id="message2Output" class="output" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- ===== SQL Scripts Tab ===== -->
+        <div id="scripts" class="tab-content">
+            <div class="section">
+                <h2>11. สร้าง SQL Script Files</h2>
+
+                <!-- Mode Selector -->
+                <p style="color:#666;margin-bottom:15px;font-size:14px;">เลือกประเภท Script ที่ต้องการสร้าง:</p>
+                <div class="script-mode-selector">
+                    <div class="mode-btn active" onclick="selectMode('passport')" id="modeBtn_passport">
+                        <span class="mode-icon">🛂</span>
+                        <span class="mode-label">แก้ไข Passport<br>+ Document Type</span>
+                    </div>
+                    <div class="mode-btn" onclick="selectMode('cif')" id="modeBtn_cif">
+                        <span class="mode-icon">🔢</span>
+                        <span class="mode-label">แก้ไข CIF Number<br>อย่างเดียว</span>
+                    </div>
+                    <div class="mode-btn" onclick="selectMode('both')" id="modeBtn_both">
+                        <span class="mode-icon">📦</span>
+                        <span class="mode-label">แก้ไขทั้ง Passport<br>+ CIF Number</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- ===== Panel: Passport ===== -->
+                <div id="panel_passport" class="script-panel active">
+                    <div class="info-box blue">🛂 <strong>Passport + Document Type</strong> — สร้าง 3 ไฟล์: Backup, Update (DOC_ID / DOC_TYPE), Verify</div>
                     <div class="input-group">
                         <label>INC Number: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 9)</small></label>
                         <input type="text" id="incNumScript" readonly style="background:#e5e5e5;">
@@ -492,395 +607,422 @@
                             <option value="99">99 - เอกสารอื่นๆ</option>
                         </select>
                     </div>
-                    <button onclick="generateScripts()">สร้างและดาวน์โหลด ZIP</button>
-                    <div id="scriptSuccess" class="success" style="display:none;"></div>
-                    <div id="scriptMessage" class="output" style="display:none;"></div>
+                    <button onclick="generateScripts('passport')">🛂 สร้างและดาวน์โหลด .7z</button>
+                    <div id="scriptSuccess_passport" class="success" style="display:none;"></div>
+                    <div id="scriptMessage_passport" class="output" style="display:none;"></div>
                 </div>
+
+                <!-- ===== Panel: CIF Only ===== -->
+                <div id="panel_cif" class="script-panel">
+                    <div class="info-box orange">🔢 <strong>CIF Number อย่างเดียว</strong> — สร้าง 2 ไฟล์: Update CIF, Verify</div>
+                    <div class="input-group">
+                        <label>INC Number: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 9)</small></label>
+                        <input type="text" id="incNumScript_cif" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>Patch Date (YYYYMMDD): <small style="color:#999;">(แปลงจากข้อ 10 อัตโนมัติ)</small></label>
+                        <input type="text" id="patchDateScript_cif" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>docId (Old Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 7)</small></label>
+                        <input type="text" id="docIdScript_cif" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>CIF Number (Old):</label>
+                        <input type="text" id="cifNumOldScript" placeholder="361459296" oninput="document.getElementById('cifNumOld').value=this.value;syncData();">
+                    </div>
+                    <div class="input-group">
+                        <label>CIF Number (New): <small style="color:#999;">กรอกค่าใหม่ที่ต้องการ update</small></label>
+                        <input type="text" id="cifNumNew_cif" placeholder="992361693" oninput="syncData()">
+                    </div>
+                    <button onclick="generateScripts('cif')">🔢 สร้างและดาวน์โหลด .7z</button>
+                    <div id="scriptSuccess_cif" class="success" style="display:none;"></div>
+                    <div id="scriptMessage_cif" class="output" style="display:none;"></div>
+                </div>
+
+                <!-- ===== Panel: Both ===== -->
+                <div id="panel_both" class="script-panel">
+                    <div class="info-box blue">📦 <strong>Passport + CIF Number</strong> — สร้าง 3 ไฟล์: Backup, Update (DOC_ID + CIF_NUMBER), Verify</div>
+                    <div class="input-group">
+                        <label>INC Number: <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 9)</small></label>
+                        <input type="text" id="incNumScript_both" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>Patch Date (YYYYMMDD): <small style="color:#999;">(แปลงจากข้อ 10 อัตโนมัติ)</small></label>
+                        <input type="text" id="patchDateScript_both" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>CitizenId (New Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 2)</small></label>
+                        <input type="text" id="citizenIdScript_both" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>docId (Old Passport): <small style="color:#999;">(ใช้ค่าเดียวกับข้อ 7)</small></label>
+                        <input type="text" id="docIdScript_both" readonly style="background:#e5e5e5;">
+                    </div>
+                    <div class="input-group">
+                        <label>CIF Number (Old):</label>
+                        <input type="text" id="cifNumOldScript_both" placeholder="361459296" oninput="document.getElementById('cifNumOld').value=this.value;syncData();">
+                    </div>
+                    <div class="input-group">
+                        <label>CIF Number (New): <small style="color:#999;">กรอกค่าใหม่ที่ต้องการ update</small></label>
+                        <input type="text" id="cifNumNew_both" placeholder="990157594" oninput="syncData()">
+                    </div>
+                    <button onclick="generateScripts('both')">📦 สร้างและดาวน์โหลด .7z</button>
+                    <div id="scriptSuccess_both" class="success" style="display:none;"></div>
+                    <div id="scriptMessage_both" class="output" style="display:none;"></div>
+                </div>
+
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        let formattedJson = '';
-        
-        const dataStore = {
-            phone: '',
-            customerId: '',
-            investorId: '',
-            requestId: '',
-            incNum: '',
-            citizenId: '',
-            docId: '',
-            cisId: '',
-            responseJson: '',
-            patchDate: '',
-            patchDateScript: '',
-            citizenIdFromElk: '',
-            cisIdFromElk: '',
-            docIdFromElk: '',
-            docTypeOld: '',
-            docTypeNew: ''
-        };
-        
-        function syncData() {
-            dataStore.phone = document.getElementById('phone').value;
-            dataStore.customerId = document.getElementById('customerId').value;
-            dataStore.investorId = document.getElementById('investorId').value;
-            dataStore.requestId = document.getElementById('requestId').value;
-            dataStore.incNum = document.getElementById('incNum').value;
-            
-            dataStore.citizenIdFromElk = document.getElementById('citizenIdFromElk').value;
-            dataStore.cisIdFromElk = document.getElementById('cisIdFromElk').value;
-            dataStore.docIdFromElk = document.getElementById('docIdFromElk').value;
-            dataStore.docTypeOld = document.getElementById('docTypeOld').value;
-            dataStore.docTypeNew = document.getElementById('docTypeNew').value;
-            
-            const patchDateInput = document.getElementById('patchDate').value;
-            if (patchDateInput) {
-                const date = new Date(patchDateInput);
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                const day = date.getDate();
-                const month = months[date.getMonth()];
-                const year = date.getFullYear();
-                dataStore.patchDate = `${day} ${month} ${year}`;
-                
-                const month2digit = String(date.getMonth() + 1).padStart(2, '0');
-                const day2digit = String(day).padStart(2, '0');
-                dataStore.patchDateScript = `${year}${month2digit}${day2digit}`;
-            }
-            
-            if (dataStore.phone) {
-                document.getElementById('phone2').value = dataStore.phone;
-                document.getElementById('msgPhone').value = dataStore.phone;
-            }
-            
-            if (dataStore.customerId) {
-                document.getElementById('customerId2').value = dataStore.customerId;
-            }
-            
-            if (dataStore.investorId) {
-                document.getElementById('investorId2').value = dataStore.investorId;
-                document.getElementById('investorId3').value = dataStore.investorId;
-            }
-            
-            if (dataStore.requestId) {
-                document.getElementById('requestId2').value = dataStore.requestId;
-                document.getElementById('requestId3').value = dataStore.requestId;
-            }
-            
-            if (dataStore.incNum) {
-                document.getElementById('incNumScript').value = dataStore.incNum;
-            }
-            
-            if (dataStore.citizenIdFromElk) {
-                document.getElementById('citizenId').value = dataStore.citizenIdFromElk;
-                document.getElementById('citizenIdScript').value = dataStore.citizenIdFromElk;
-                dataStore.citizenId = dataStore.citizenIdFromElk;
-            }
-            
-            if (dataStore.cisIdFromElk) {
-                document.getElementById('cisId').value = dataStore.cisIdFromElk;
-                dataStore.cisId = dataStore.cisIdFromElk;
-            }
-            
-            if (dataStore.docIdFromElk) {
-                document.getElementById('docId').value = dataStore.docIdFromElk;
-                document.getElementById('docIdScript').value = dataStore.docIdFromElk;
-                document.getElementById('docIdForType').value = dataStore.docIdFromElk;
-                dataStore.docId = dataStore.docIdFromElk;
-            }
-            
-            if (dataStore.docTypeOld) {
-                document.getElementById('docTypeOldScript').value = dataStore.docTypeOld;
-            }
-            
-            if (dataStore.patchDateScript) {
-                document.getElementById('patchDateScript').value = dataStore.patchDateScript;
-            }
+<script>
+    let formattedJson = '';
+    let currentMode = 'passport';
+
+    const dataStore = {
+        phone: '', customerId: '', investorId: '', requestId: '',
+        incNum: '', citizenId: '', docId: '', cisId: '',
+        responseJson: '', patchDate: '', patchDateScript: '',
+        citizenIdFromElk: '', cisIdFromElk: '', docIdFromElk: '',
+        docTypeOld: '', docTypeNew: '', cifNumOld: ''
+    };
+
+    function selectMode(mode) {
+        currentMode = mode;
+        ['passport','cif','both'].forEach(m => {
+            document.getElementById('modeBtn_' + m).classList.toggle('active', m === mode);
+            document.getElementById('panel_' + m).classList.toggle('active', m === mode);
+        });
+    }
+
+    function syncFromWgwInc() {
+        const val = document.getElementById('incNumWgw').value;
+        document.getElementById('incNum').value = val;
+        syncData();
+    }
+
+    function syncData() {
+        dataStore.phone       = document.getElementById('phone').value;
+        dataStore.customerId  = document.getElementById('customerId').value;
+        dataStore.investorId  = document.getElementById('investorId').value;
+        dataStore.requestId   = document.getElementById('requestId').value;
+        dataStore.incNum      = document.getElementById('incNum').value;
+
+        dataStore.citizenIdFromElk = document.getElementById('citizenIdFromElk').value;
+        dataStore.cisIdFromElk     = document.getElementById('cisIdFromElk').value;
+        dataStore.docIdFromElk     = document.getElementById('docIdFromElk').value;
+        dataStore.docTypeOld       = document.getElementById('docTypeOld').value;
+        dataStore.docTypeNew       = document.getElementById('docTypeNew').value;
+        dataStore.cifNumOld        = document.getElementById('cifNumOld').value;
+
+        const patchDateInput = document.getElementById('patchDate').value;
+        if (patchDateInput) {
+            const date = new Date(patchDateInput);
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const day   = date.getDate();
+            dataStore.patchDate = `${day} ${months[date.getMonth()]} ${date.getFullYear()}`;
+            const m2 = String(date.getMonth()+1).padStart(2,'0');
+            const d2 = String(day).padStart(2,'0');
+            dataStore.patchDateScript = `${date.getFullYear()}${m2}${d2}`;
+        } else {
+            dataStore.patchDate = '';
+            dataStore.patchDateScript = '';
         }
-        
-        function switchTab(event, tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-        }
-        
-        function generateQuery1() {
-            const phone = dataStore.phone || document.getElementById('phone').value;
-            const query = `"${phone}" and "customerId"`;
-            const output = document.getElementById('output1');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output1\')">Copy</button>';
+
+        // Sync read-only fields (always sync even when cleared)
+        document.getElementById('phone2').value      = dataStore.phone;
+        document.getElementById('msgPhone').value    = dataStore.phone;
+        document.getElementById('customerId2').value = dataStore.customerId;
+        document.getElementById('investorId2').value = dataStore.investorId;
+        document.getElementById('investorId3').value = dataStore.investorId;
+        document.getElementById('requestId3').value  = dataStore.requestId;
+
+        document.getElementById('incNumWgw').value         = dataStore.incNum;
+        document.getElementById('incNumScript').value      = dataStore.incNum;
+        document.getElementById('incNumScript_cif').value  = dataStore.incNum;
+        document.getElementById('incNumScript_both').value = dataStore.incNum;
+
+        dataStore.citizenId = dataStore.citizenIdFromElk;
+        document.getElementById('citizenId').value            = dataStore.citizenId;
+        document.getElementById('citizenIdScript').value      = dataStore.citizenId;
+        document.getElementById('citizenIdScript_both').value = dataStore.citizenId;
+
+        dataStore.cisId = dataStore.cisIdFromElk;
+        document.getElementById('cisId').value = dataStore.cisId;
+
+        dataStore.docId = dataStore.docIdFromElk;
+        document.getElementById('docId').value            = dataStore.docId;
+        document.getElementById('docIdScript').value      = dataStore.docId;
+        document.getElementById('docIdScript_cif').value  = dataStore.docId;
+        document.getElementById('docIdScript_both').value = dataStore.docId;
+
+        document.getElementById('docTypeOldScript').value = dataStore.docTypeOld;
+
+        document.getElementById('patchDateScript').value      = dataStore.patchDateScript;
+        document.getElementById('patchDateScript_both').value = dataStore.patchDateScript;
+        document.getElementById('patchDateScript_cif').value  = dataStore.patchDateScript;
+
+        document.getElementById('cifNumOldScript').value      = dataStore.cifNumOld;
+        document.getElementById('cifNumOldScript_both').value = dataStore.cifNumOld;
+    }
+
+    function switchTab(event, tabName) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+    }
+
+    // ===== Query generators =====
+    function generateQuery1() {
+        const q = `"${dataStore.phone}" and "customerId"`;
+        showOutput('output1', q);
+    }
+    function generateQuery2() {
+        const q = `"${dataStore.phone}" and "CisIdInfo" and "CitizenId" and "CisId"`;
+        showOutput('output2', q);
+    }
+    function generateQuery3() {
+        const q = `"${dataStore.customerId}" and "investorId"`;
+        showOutput('output3', q);
+    }
+    function generateQuery4() {
+        const q = `"v3/${dataStore.investorId}" and "X-Request-Id"`;
+        showOutput('output4', q);
+    }
+    function generateQuery5() {
+        const q = `"${dataStore.requestId}" and "response"`;
+        showOutput('output5', q);
+    }
+
+    // ===== Work notes & ServiceNow Additional Info Generators (V10) =====
+    function generateWorkNotes() {
+        const sender = document.getElementById('senderUser').value.trim() || '"User คนส่ง"';
+        const invId = dataStore.investorId || 'Investor ID';
+        const msg = `รบกวนส่ง DBA_Oracle ช่วย query ตามรายละเอียดด้านล่างครับ และรบกวนส่งข้อมูลกลับมา ${sender} ครับ
+
+SELECT ti.CIS_ID ,ti.DOC_ID ,ti.DOC_TYPE ,ti.CIF_NUMBER ,ti.FCN_CARD_ID ,ti.FCN_CARD_TYPE , ti.FCN_PASSPORT_COUNTRY
+FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR ti
+WHERE ti.INVESTOR_ID = '${invId}';`;
+        showOutput('outputWorkNotes', msg);
+    }
+
+    function generateSnowAdditionalInfo() {
+        const rawInc = dataStore.incNum || 'INCXXXXXXXXX';
+        const inc = rawInc.split('_')[0].trim();
+        const invId = dataStore.investorId || 'Investor ID';
+        const info = `Ref. ${inc}
+
+รบกวน query ข้อมูล
+
+SELECT ti.CIS_ID ,ti.DOC_ID ,ti.DOC_TYPE ,ti.CIF_NUMBER ,ti.FCN_CARD_ID ,ti.FCN_CARD_TYPE , ti.FCN_PASSPORT_COUNTRY
+FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR ti
+WHERE ti.INVESTOR_ID = '${invId}';`;
+        showOutput('outputSnowInfo', info);
+    }
+
+    function showOutput(id, text) {
+        const el = document.getElementById(id);
+        el.innerHTML = text + `<button class="copy-btn" onclick="copyToClipboard('${id}')">Copy</button>`;
+        el.style.display = 'block';
+    }
+
+    // ===== JSON Formatter (unchanged) =====
+    function formatJSON() {
+        const input = document.getElementById('jsonInput').value;
+        const output = document.getElementById('jsonOutput');
+        try {
+            const cleaned = input.replace(/\\"/g, '"');
+            const parsed = JSON.parse(cleaned);
+            formattedJson = JSON.stringify(parsed, null, 4);
+            output.innerHTML = '<pre>' + syntaxHighlight(formattedJson) + '</pre><button class="copy-btn" onclick="copyJSON()">Copy</button>';
+            output.style.display = 'block';
+            document.getElementById('responseJson').value = input;
+            dataStore.responseJson = input;
+        } catch (e) {
+            output.innerHTML = `<pre style="color:#ff6b6b;">Error: Invalid JSON - ${e.message}</pre>`;
             output.style.display = 'block';
         }
-        
-        function generateQuery2() {
-            const phone = dataStore.phone || document.getElementById('phone').value;
-            const query = `"${phone}" and "CisIdInfo" and "CitizenId" and "CisId"`;
-            const output = document.getElementById('output2');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output2\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateQuery3() {
-            const customerId = dataStore.customerId || document.getElementById('customerId').value;
-            const query = `"${customerId}" and "investorId"`;
-            const output = document.getElementById('output3');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output3\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateQuery4() {
-            const investorId = dataStore.investorId || document.getElementById('investorId').value;
-            const query = `"v3/${investorId}" and "X-Request-Id"`;
-            const output = document.getElementById('output4');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output4\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateQuery5() {
-            const requestId = dataStore.requestId || document.getElementById('requestId').value;
-            const query = `"${requestId}" and "response"`;
-            const output = document.getElementById('output5');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output5\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateQuery7() {
-            const requestId = dataStore.requestId || document.getElementById('requestId').value;
-			const investorId = dataStore.investorId || document.getElementById('investorId').value;
-            const query = `"${investorId}" and "documentId" or "${requestId}" and "docId"`;
-            const output = document.getElementById('output7');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output7\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateQuery8() {
-            const docId = dataStore.docId || document.getElementById('docIdForType').value;
-            const query = `"${docId}" and "documenttype"`;
-            const output = document.getElementById('output8');
-            output.innerHTML = query + '<button class="copy-btn" onclick="copyToClipboard(\'output8\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function formatJSON() {
-            const input = document.getElementById('jsonInput').value;
-            const output = document.getElementById('jsonOutput');
-            
-            try {
-                const cleaned = input.replace(/\\"/g, '"');
-                const parsed = JSON.parse(cleaned);
-                formattedJson = JSON.stringify(parsed, null, 4);
-                
-                const highlighted = syntaxHighlight(formattedJson);
-                output.innerHTML = '<pre>' + highlighted + '</pre><button class="copy-btn" onclick="copyJSON()">Copy</button>';
-                output.style.display = 'block';
-                
-                document.getElementById('responseJson').value = input;
-                dataStore.responseJson = input;
-            } catch (e) {
-                output.innerHTML = '<pre style="color:#ff6b6b;">Error: Invalid JSON - ' + e.message + '</pre>';
-                output.style.display = 'block';
-            }
-        }
-        
-        function syntaxHighlight(json) {
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                let cls = 'json-number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = 'json-key';
-                    } else {
-                        cls = 'json-string';
-                    }
-                } else if (/true|false/.test(match)) {
-                    cls = 'json-boolean';
-                } else if (/null/.test(match)) {
-                    cls = 'json-null';
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
-        }
-        
-        function copyJSON() {
-            navigator.clipboard.writeText(formattedJson).then(() => {
-                const btn = document.querySelector('#jsonOutput .copy-btn');
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = originalText, 2000);
-            });
-        }
-        
-        function generateMessage1() {
-            const inc = dataStore.incNum;
-            const phone = dataStore.phone;
-            const citizenId = dataStore.citizenId;
-            const docId = dataStore.docId;
-            const cisId = dataStore.cisId;
-            const customerId = dataStore.customerId;
-            const investorId = dataStore.investorId;
-            const requestId = dataStore.requestId;
-            const response = dataStore.responseJson;
-            
-            let formattedResponse = response;
-            if (response) {
-                try {
-                    const cleaned = response.replace(/\\"/g, '"');
-                    const parsed = JSON.parse(cleaned);
-                    formattedResponse = JSON.stringify(parsed, null, 4);
-                } catch (e) {
-                    // Use as is if not valid JSON
-                }
-            }
-            
-            const message = `@Jadsadakon เดี่ยวส่งต่อ WGW ทำการ Patch Update Passport No. ต่อครับ
+    }
+    function syntaxHighlight(json) {
+        json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+            let cls = 'json-number';
+            if (/^"/.test(m)) cls = /:$/.test(m) ? 'json-key' : 'json-string';
+            else if (/true|false/.test(m)) cls = 'json-boolean';
+            else if (/null/.test(m)) cls = 'json-null';
+            return `<span class="${cls}">${m}</span>`;
+        });
+    }
+    function copyJSON() {
+        navigator.clipboard.writeText(formattedJson).then(() => {
+            const btn = document.querySelector('#jsonOutput .copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+    }
+
+    // ===== Messages (unchanged) =====
+    function fmtResponse(raw) {
+        if (!raw) return '';
+        try { return JSON.stringify(JSON.parse(raw.replace(/\\"/g,'"')), null, 4); } catch(e) { return raw; }
+    }
+    function generateMessage1() {
+        const msg = `@Jadsadakon เดี๋ยวส่งต่อ WGW ทำการ Patch Update Passport No. ต่อครับ
 cc @Bhasakorn
  
-${inc}
+${dataStore.incNum}
  
-Phone: ${phone}
+Phone: ${dataStore.phone}
  
-CitizenId: ${citizenId} #NewPassport
-docId: ${docId} #OldPassport
+CitizenId: ${dataStore.citizenId} #NewPassport
+docId: ${dataStore.docId} #OldPassport
  
-CisId: ${cisId}
-customerId: ${customerId}
-InvestorId: ${investorId}
+CisId: ${dataStore.cisId}
+customerId: ${dataStore.customerId}
+InvestorId: ${dataStore.investorId}
  
-Request-Id: ${requestId}
- 
-Response:
-${formattedResponse}`;
-            
-            const output = document.getElementById('message1Output');
-            output.innerHTML = message + '<button class="copy-btn" onclick="copyToClipboard(\'message1Output\')">Copy</button>';
-            output.style.display = 'block';
-        }
-        
-        function generateMessage2() {
-            const patchDate = dataStore.patchDate;
-            const inc = dataStore.incNum;
-            const phone = dataStore.phone;
-            const citizenId = dataStore.citizenId;
-            const docId = dataStore.docId;
-            const cisId = dataStore.cisId;
-            const customerId = dataStore.customerId;
-            const investorId = dataStore.investorId;
-            const requestId = dataStore.requestId;
-            const response = dataStore.responseJson;
-            
-            let formattedResponse = response;
-            if (response) {
-                try {
-                    const cleaned = response.replace(/\\"/g, '"');
-                    const parsed = JSON.parse(cleaned);
-                    formattedResponse = JSON.stringify(parsed, null, 4);
-                } catch (e) {
-                    // Use as is if not valid JSON
-                }
-            }
-            
-            const message = `@Bhasakorn @Nantich  มีแจ้ง Case Passport ของ ${inc} ครับ
-เดี่ยวผมตรียม SQL Script ให้นะครับ >> Patch Date = ${patchDate} ครับ
- 
-Phone: ${phone}
- 
-CitizenId: ${citizenId} #NewPassport
-docId: ${docId} #OldPassport
- 
-CisId: ${cisId}
-customerId: ${customerId}
-InvestorId: ${investorId}
- 
-Request-Id: ${requestId}
+Request-Id: ${dataStore.requestId}
  
 Response:
-${formattedResponse}`;
-            
-            const output = document.getElementById('message2Output');
-            output.innerHTML = message + '<button class="copy-btn" onclick="copyToClipboard(\'message2Output\')">Copy</button>';
-            output.style.display = 'block';
+${fmtResponse(dataStore.responseJson)}`;
+        showOutput('message1Output', msg);
+    }
+    function generateMessage2() {
+        const msg = `@Bhasakorn @Nantich  มีแจ้ง Case Passport ของ ${dataStore.incNum} ครับ
+เดี๋ยวผมเตรียม SQL Script ให้นะครับ >> Patch Date = ${dataStore.patchDate} ครับ
+ 
+Phone: ${dataStore.phone}
+ 
+CitizenId: ${dataStore.citizenId} #NewPassport
+docId: ${dataStore.docId} #OldPassport
+ 
+CisId: ${dataStore.cisId}
+customerId: ${dataStore.customerId}
+InvestorId: ${dataStore.investorId}
+ 
+Request-Id: ${dataStore.requestId}
+ 
+Response:
+${fmtResponse(dataStore.responseJson)}`;
+        showOutput('message2Output', msg);
+    }
+
+    // ===== Script Generator =====
+    async function generateScripts(mode) {
+        const inc      = dataStore.incNum;
+        const patchDate = dataStore.patchDateScript;
+        const patchDateFmt = dataStore.patchDate;
+        const citizenId = dataStore.citizenId;
+        const docId    = dataStore.docId;
+        const docTypeOld = dataStore.docTypeOld;
+        const docTypeNew = dataStore.docTypeNew;
+        const cifOld   = dataStore.cifNumOld;
+        const cifNew_cif  = document.getElementById('cifNumNew_cif').value.trim();
+        const cifNew_both = document.getElementById('cifNumNew_both').value.trim();
+
+        // Validation
+        if (!inc) { alert('กรุณากรอก INC Number (ข้อ 9)'); return; }
+
+        if (mode === 'passport') {
+            if (!patchDate || !citizenId || !docId) { alert('กรุณากรอกข้อมูลให้ครบ (Patch Date, CitizenId, docId)'); return; }
+            if (!docTypeNew) { alert('กรุณาเลือก Document Type (New)'); return; }
         }
-        
-        async function generateScripts() {
-            const inc = dataStore.incNum;
-            const patchDate = dataStore.patchDateScript;
-            const citizenId = dataStore.citizenId;
-            const docId = dataStore.docId;
-            const docTypeOld = dataStore.docTypeOld;
-            const docTypeNew = dataStore.docTypeNew;
-            const patchDateFormatted = dataStore.patchDate;
-            
-            if (!inc || !patchDate || !citizenId || !docId) {
-                alert('กรุณากรอกข้อมูลให้ครบทุกช่อง');
-                return;
-            }
-            
-            if (!docTypeNew) {
-                alert('กรุณาเลือก Document Type (New)');
-                return;
-            }
-            
+        if (mode === 'cif') {
+            if (!docId)  { alert('กรุณากรอก docId (Old Passport)'); return; }
+            if (!cifOld) { alert('กรุณากรอก CIF Number (Old)'); return; }
+            if (!cifNew_cif) { alert('กรุณากรอก CIF Number (New)'); return; }
+        }
+        if (mode === 'both') {
+            if (!patchDate || !citizenId || !docId) { alert('กรุณากรอกข้อมูลให้ครบ (Patch Date, CitizenId, docId)'); return; }
+            if (!cifNew_both) { alert('กรุณากรอก CIF Number (New)'); return; }
+        }
+
+        const zip = new JSZip();
+        let folderName, fileName;
+
+        if (mode === 'passport') {
+            folderName = inc;
+            fileName   = `${inc}.7z`;
+
             const backup = `CREATE TABLE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR_BAK_${patchDate} AS SELECT * FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR;`;
-            
-            let update;
-            if (docTypeOld === docTypeNew) {
-                // Same document type - only update DOC_ID
-                update = `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET DOC_ID = '${citizenId}' WHERE DOC_ID = '${docId}';`;
-            } else {
-                // Different document type - update both DOC_TYPE and DOC_ID
-                update = `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET DOC_TYPE='${docTypeNew}', DOC_ID = '${citizenId}' WHERE DOC_ID = '${docId}';`;
-            }
-            
+            const update = docTypeOld === docTypeNew
+                ? `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET DOC_ID = '${citizenId}' WHERE DOC_ID = '${docId}';`
+                : `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET DOC_TYPE='${docTypeNew}', DOC_ID = '${citizenId}' WHERE DOC_ID = '${docId}';`;
             const verify = `SELECT INVESTOR_ID, DOC_TYPE, DOC_ID, FCN_CARD_ID, FCN_CARD_TYPE, FCN_PASSPORT_COUNTRY FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR WHERE DOC_ID in ('${citizenId}', '${docId}') ORDER BY INVESTOR_ID;`;
-            
-            // Create folder structure in ZIP
-            const zip = new JSZip();
-            const folder = zip.folder(inc);
+
+            const folder = zip.folder(folderName);
             folder.file('1_Backup.sql', backup);
             folder.file('2_Update.sql', update);
             folder.file('3_Verify.sql', verify);
-            
-            const content = await zip.generateAsync({type: 'blob'});
-            const url = URL.createObjectURL(content);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${inc}.7z`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            // Show success message
-            const success = document.getElementById('scriptSuccess');
-            success.textContent = `✅ สร้างไฟล์ ${inc}.7z สำเร็จ! กำลังดาวน์โหลด...`;
-            success.style.display = 'block';
-            setTimeout(() => success.style.display = 'none', 5000);
-            
-            // Generate and show the message for WGW team
-            const message = `@Bhasakorn @Nantich 
-Script File ครับ
-ref. ${inc}
-Patch Date = ${patchDateFormatted}
- 
-CitizenId: ${citizenId} #NewPassport
-docId: ${docId} #OldPassport`;
-            
-            const messageOutput = document.getElementById('scriptMessage');
-            messageOutput.innerHTML = message + '<button class="copy-btn" onclick="copyToClipboard(\'scriptMessage\')">Copy</button>';
-            messageOutput.style.display = 'block';
+
+        } else if (mode === 'cif') {
+            folderName = `${inc}_Update CIF_Number`;
+            fileName   = `${inc}_Update CIF_Number.7z`;
+
+            // WHERE ใช้ docId (Old Passport) ไม่ใช่ cifOld
+            const update = `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET CIF_NUMBER = '${cifNew_cif}' WHERE DOC_ID = '${docId}';`;
+            const verify = `SELECT CIF_NUMBER, DOC_ID FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR WHERE DOC_ID in ('${docId}');`;
+
+            const folder = zip.folder(folderName);
+            folder.file('1_update_cif_number.sql', update);
+            folder.file('2_verify_patched_data.sql', verify);
+
+        } else if (mode === 'both') {
+            folderName = inc;
+            fileName   = `${inc}.7z`;
+
+            const backup = `CREATE TABLE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR_BAK_${patchDate} AS SELECT * FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR;`;
+            const update = `UPDATE WGW_ACCOUNT_MANAGEMENT.T_INVESTOR SET DOC_ID = '${citizenId}', CIF_NUMBER = '${cifNew_both}' WHERE DOC_ID = '${docId}';`;
+            const verify =
+`SELECT INVESTOR_ID, DOC_TYPE, DOC_ID, FCN_CARD_ID, FCN_CARD_TYPE, FCN_PASSPORT_COUNTRY FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR WHERE DOC_ID in ('${citizenId}', '${docId}') ORDER BY INVESTOR_ID;
+
+SELECT CIF_NUMBER, DOC_ID FROM WGW_ACCOUNT_MANAGEMENT.T_INVESTOR WHERE DOC_ID in ('${citizenId}', '${docId}');`;
+
+            const folder = zip.folder(folderName);
+            folder.file('1_Backup.sql', backup);
+            folder.file('2_Update.sql', update);
+            folder.file('3_Verify.sql', verify);
         }
-        
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            const text = element.textContent.replace('Copy', '').trim();
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = element.querySelector('.copy-btn');
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = originalText, 2000);
-            });
+
+        // Download as .7z
+        const content = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 9 } });
+        const url = URL.createObjectURL(content);
+        const a   = document.createElement('a');
+        a.href = url; a.download = fileName; a.click();
+        URL.revokeObjectURL(url);
+
+        // Success message
+        const sEl = document.getElementById(`scriptSuccess_${mode}`);
+        sEl.innerHTML = `✅ สร้างไฟล์ <strong>${fileName}</strong> สำเร็จ! กำลังดาวน์โหลด...`;
+        sEl.style.display = 'block';
+        setTimeout(() => sEl.style.display = 'none', 6000);
+
+        // Chat message
+        let chatMsg = '';
+        if (mode === 'passport' || mode === 'both') {
+            chatMsg = `@Bhasakorn @Nantich \nScript File ครับ\nref. ${inc}\n \nPatch Date = ${patchDateFmt}\n \nCitizenId: ${citizenId} #NewPassport\ndocId: ${docId} #OldPassport`;
+            if (mode === 'both') chatMsg += `\nCIF Number: ${cifOld} → ${cifNew_both}`;
+        } else {
+            chatMsg = `@Bhasakorn @Nantich \nScript File (Update CIF Number) ครับ\nref. ${inc}\n \nPatch Date = ${patchDateFmt}\n \ndocId: ${docId}\nCIF Number: ${cifOld} → ${cifNew_cif}`;
         }
-    </script>
+
+        const mEl = document.getElementById(`scriptMessage_${mode}`);
+        mEl.innerHTML = chatMsg + `<button class="copy-btn" onclick="copyToClipboard('scriptMessage_${mode}')">Copy</button>`;
+        mEl.style.display = 'block';
+    }
+
+    function copyToClipboard(elementId) {
+        const el   = document.getElementById(elementId);
+        const text = el.textContent.replace(/Copy$/, '').trim();
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = el.querySelector('.copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+    }
+</script>
 </body>
 </html>
